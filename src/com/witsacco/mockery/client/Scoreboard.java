@@ -1,26 +1,31 @@
 package com.witsacco.mockery.client;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Scoreboard {
 
-	HashSet<MockeryUser> users;
+	private ScrollPanel mainPanel;
+	
+//	HashSet<MockeryUser> users;
 
-	/**
-	 * 
-	 */
 	public Scoreboard() {
-		users = new HashSet< MockeryUser >();
-	}
-	
-	
-	void addUser( MockerUser newUser )  {
 		
-	}
-	
-	ArrayList< MockeryUser > getStandings() {
+		mainPanel = new ScrollPanel();
+		mainPanel.addStyleName( "scoreboard-panel" );
 		
+//		users = new HashSet< MockeryUser >();
 	}
 	
+	public Widget getPanel() {
+		return mainPanel;
+	}
+	
+//	void addUser( MockerUser newUser )  {
+//		
+//	}
+//	
+//	ArrayList< MockeryUser > getStandings() {
+//		
+//	}
 }

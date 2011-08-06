@@ -1,63 +1,24 @@
-/** Add css rules here for your application. */
+@CHARSET "ISO-8859-1";
 
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
-}
-
-.sendButton {
-  display: block;
-  font-size: 16pt;
-}
-
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
-}
-
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
-.header {
-	backgound-color: #EDEDED;
-	font-weight: bold;
+.page-panel {
 	width: 100%;
+	height: 100%;
+	background: url("sheep.jpg");
 }
-.headerPanel {
-	background-color: #EDEDED;
-	border-bottom: 2px solid #999999;
+
+.page-panel .main-dock {
+	height: 600px;
+	width: 650px;	
+	top: 100px;
+	border: 2px solid #000000;
+}
+
+.page-panel .main-dock .header-label {
+	background-color: #BBB;
+	font-weight: bold;
+	border-bottom: 2px solid #666;
+	text-align: left;
+	padding-left: 10px;
+	padding-top: 2px;
 	font-size: 20px;
-	padding-left: 20px;
-}
-.mainPanel {
-	border-top: 1px solid #999999;
-	border-left: 1px solid #999999;
-	border-right: 2px solid #555555;
-	border-bottom: 2px solid #555555;
-}
-.room-panel {
-	border: 1px solid black;
-	background-color: lightblue;
-}
-.scoreboard-panel {
-	border: 1px solid black;
-	background-color: gold;
-}
-.entry-panel {
-	border: 1px solid black;
-	background-color: pink;
 }

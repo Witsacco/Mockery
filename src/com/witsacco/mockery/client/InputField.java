@@ -1,11 +1,21 @@
 package com.witsacco.mockery.client;
 
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 public class InputField {
 
+	private FlowPanel mainPanel;
+	
 	public InputField() {
 		
+		mainPanel = new FlowPanel();
+		mainPanel.addStyleName( "input-panel" );
 	}
-	
+
+	public Widget getPanel() {
+		return mainPanel;
+	}
 	
 	public String getText() {
 		//TODO Grab text from DOM

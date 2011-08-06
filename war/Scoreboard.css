@@ -1,0 +1,6 @@
+@CHARSET "ISO-8859-1";
+
+.scoreboard-panel {
+	background-color: gold;
+	border-left: 1px solid #666;
+}

@@ -1,0 +1,6 @@
+@CHARSET "ISO-8859-1";
+
+.room-panel {
+	background-color: pink;
+	border-right: 1px solid #666;
+}
