@@ -4,3 +4,27 @@
 	background-color: pink;
 	border-right: 1px solid #666;
 }
+
+.room-panel .message-table {
+	border-collapse: collapse;
+	width: 97%;
+	margin-top: 5px;
+}
+
+.room-panel .message-table .row-even {
+	background-color:  #EDEDED;
+}
+
+.room-panel .message-table .row-odd {
+	background-color: #CCCCCC;
+}
+
+.room-panel .message-table .sender-col {
+	font-weight: bold;
+	padding: 5px;
+}
+
+.room-panel .message-table .content-col {
+	font-style: italics;
+	padding: 5px;
+}
