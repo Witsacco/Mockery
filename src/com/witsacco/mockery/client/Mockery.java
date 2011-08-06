@@ -44,6 +44,7 @@ public class Mockery implements EntryPoint {
 
 	private void initializeUI() {
 
+		// Create a panel to span the page and align its contents in the center
 		HorizontalPanel pagePanel = new HorizontalPanel();
 		pagePanel.addStyleName( "page-panel" );
 		pagePanel.setHorizontalAlignment( HorizontalPanel.ALIGN_CENTER );
