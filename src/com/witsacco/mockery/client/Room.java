@@ -28,10 +28,6 @@ public class Room {
 		
 		mainPanel.add( messageTable );
 
-		HTMLTable.ColumnFormatter colFormatter = messageTable.getColumnFormatter();
-		colFormatter.addStyleName( 0, "sender-col" );
-		colFormatter.addStyleName( 1, "content-col" );
-
 		addMessage( "Rich", "The Mets rule" );
 		addMessage( "Dom", "The Mets suck" );
 	}
