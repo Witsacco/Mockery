@@ -6,9 +6,9 @@
 }
 
 .scoreboard-panel .score-table {
-	border-collapse: collapse;
 	width: 95%;
 	margin-top: 5px;
+	border-collapse: collapse;
 }
 
 .scoreboard-panel .score-table .score-header {
