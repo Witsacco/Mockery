@@ -1,8 +1,10 @@
 package com.witsacco.mockery.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -19,6 +21,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 	// MockeryUser user;
 	InputField inputField;
 
+	private MessagePostedServiceAsync messagePostedSvc;
+
 	/**
 	 * This is the entry point method.
 	 */
@@ -31,14 +35,14 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 		// Set up user interface
 		initializeUI();
-		
+
 		// Set up listeners for events
 		initializeHandlers();
 	}
 
 	/**
-	 * Sets up listeners for new messages posted by the user
-	 * or new messages posted by other users
+	 * Sets up listeners for new messages posted by the user or new messages
+	 * posted by other users
 	 */
 	private void initializeHandlers() {
 
@@ -97,7 +101,27 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 	@Override
 	public void onMessageReceived( MessagePostedEvent event ) {
-        String newMessage = event.getMessage();
-        room.addMessage( "Me", newMessage );
+		String newMessage = event.getMessage();
+		room.addMessage( "Me", newMessage );
+
+		// Initialize the service proxy.
+		if ( messagePostedSvc == null ) {
+			messagePostedSvc = GWT.create( MessagePostedService.class );
+		}
+
+		// Set up the callback object.
+		AsyncCallback< Void > callback = new AsyncCallback< Void >() {
+			public void onFailure( Throwable caught ) {
+				Window.alert( "Something went wrong!" );
+			}
+
+			public void onSuccess( Void result ) {
+				Window.alert( "Posted!" );
+			}
+		};
+
+		// Make the call to the stock price service.
+		messagePostedSvc
+				.postMessage( 0, "me", newMessage, callback );
 	}
 }

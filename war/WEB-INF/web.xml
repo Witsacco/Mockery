@@ -4,12 +4,21 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  
-  <!-- Servlets -->
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Mockery.html</welcome-file>
-  </welcome-file-list>
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>messagePostedServiceImpl</servlet-name>
+		<servlet-class>com.witsacco.mockery.server.MessagePostedServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>messagePostedServiceImpl</servlet-name>
+		<url-pattern>/mockery/messagePosted</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Mockery.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>
