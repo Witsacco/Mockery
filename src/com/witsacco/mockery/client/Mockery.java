@@ -5,7 +5,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -16,9 +18,11 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
+	// An object that represents the current user, logged in or not
+	private MockeryUser user = null;
+
 	Scoreboard scoreboard;
 	Room room;
-	// MockeryUser user;
 	InputField inputField;
 
 	private MessagePostedServiceAsync messagePostedSvc;
@@ -27,17 +31,74 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		scoreboard = new Scoreboard();
-		room = new Room();
-		inputField = new InputField();
 
-		// TODO get mockery user
+		// Create an instance of the login service
+		LoginServiceAsync loginService = GWT.create( LoginService.class );
 
-		// Set up user interface
-		initializeUI();
+		// Attempt to log the user in
+		loginService.login( GWT.getHostPageBaseURL(),
+				new AsyncCallback< MockeryUser >() {
+					public void onFailure( Throwable error ) {
+						// TODO Handle an error on login more elegantly
+						Window.alert( error.getMessage() );
+					}
 
-		// Set up listeners for events
-		initializeHandlers();
+					public void onSuccess( MockeryUser result ) {
+						user = result;
+						if ( user.isLoggedIn() ) {
+
+							// Create UI elements
+							scoreboard = new Scoreboard();
+							room = new Room();
+							inputField = new InputField();
+							
+							// Add the user to the scoreboard
+							// TODO Fix this
+							scoreboard.addUser( user.getNickname(), 0 );
+							
+							// Set up user interface
+							initializeUI();
+
+							// Set up listeners for events
+							initializeHandlers();
+						}
+						else {
+
+							showLoginScreen();
+
+						}
+					}
+				} );
+	}
+
+	private void showLoginScreen() {
+
+		// Panel for the login screen
+		FlowPanel loginPanel = new FlowPanel();
+		loginPanel.addStyleName( "login-panel" );
+
+		// Labels for the login screen
+		Label loginHeader = new Label( "Welcome to Mockery, a-hole." );
+		Label loginInstructions = new Label(
+				"To get started, sign in with your Google account." );
+		Label loginChallenge = new Label( "Be prepared to bring your A game." );
+
+		// Login button and panel
+		Anchor loginButton = new Anchor( "Sign in with Google" );
+		loginButton.addStyleName( "login-button" );
+		loginButton.setHref( user.getLoginUrl() );
+		FlowPanel loginButtonPanel = new FlowPanel();
+		loginButtonPanel.add( loginButton );
+
+		// Assemble the panel
+		loginPanel.add( loginHeader );
+		loginPanel.add( loginInstructions );
+		loginPanel.add( loginButtonPanel );
+		loginPanel.add( loginChallenge );
+
+		// Add the login panel to the root page element
+		RootLayoutPanel rp = RootLayoutPanel.get();
+		rp.add( loginPanel );
 	}
 
 	/**
@@ -61,10 +122,22 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 		DockLayoutPanel mainDock = new DockLayoutPanel( Unit.PCT );
 		mainDock.addStyleName( "main-dock" );
 
-		// Add a Header to the main UI
+		// Create a header
 		Label headerLabel = new Label( "Mockery" );
-		headerLabel.addStyleName( "header-label" );
-		mainDock.addNorth( headerLabel, 5 );
+		
+		// Create a logout link
+		Anchor logoutButton = new Anchor( "Sign out" );
+		logoutButton.addStyleName( "logout-button" );
+		logoutButton.setHref( user.getLogoutUrl() );
+		
+		// Create the global header panel
+		HorizontalPanel header = new HorizontalPanel();
+		header.addStyleName( "header" );
+		header.add( headerLabel );
+		header.add( logoutButton );
+		
+		// Add the Header to the main UI
+		mainDock.addNorth( header, 5 );
 
 		// Add the Input to the main UI
 		Widget inputPanel = inputField.getPanel();

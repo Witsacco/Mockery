@@ -7,5 +7,7 @@ public class MessageJudge {
 		//TODO Generate score
 		//TODO Construct MessageScore object
 		//TODO Return new MessageScore
+		
+		return null;
 	}
 }
