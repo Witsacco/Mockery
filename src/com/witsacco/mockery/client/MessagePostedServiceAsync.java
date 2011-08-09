@@ -1,8 +1,10 @@
 package com.witsacco.mockery.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.witsacco.mockery.shared.Message;
 
 public interface MessagePostedServiceAsync {
 
-	void postMessage( int roomId, String user, String content, AsyncCallback< Void > callback );
+	public void postMessage( Message message, AsyncCallback< Message > callback );
+
 }

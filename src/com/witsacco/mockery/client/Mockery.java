@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.witsacco.mockery.shared.Message;
+import com.witsacco.mockery.shared.MockeryUser;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -36,39 +38,38 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 		LoginServiceAsync loginService = GWT.create( LoginService.class );
 
 		// Attempt to log the user in
-		loginService.login( GWT.getHostPageBaseURL(),
-				new AsyncCallback< MockeryUser >() {
-					public void onFailure( Throwable error ) {
-						// TODO Handle an error on login more elegantly
-						Window.alert( error.getMessage() );
-					}
+		loginService.login( GWT.getHostPageBaseURL(), new AsyncCallback< MockeryUser >() {
+			public void onFailure( Throwable error ) {
+				// TODO Handle an error on login more elegantly
+				Window.alert( error.getMessage() );
+			}
 
-					public void onSuccess( MockeryUser result ) {
-						user = result;
-						if ( user.isLoggedIn() ) {
+			public void onSuccess( MockeryUser result ) {
+				user = result;
+				if ( user.isLoggedIn() ) {
 
-							// Create UI elements
-							scoreboard = new Scoreboard();
-							room = new Room();
-							inputField = new InputField();
-							
-							// Add the user to the scoreboard
-							// TODO Fix this
-							scoreboard.addUser( user.getNickname(), 0 );
-							
-							// Set up user interface
-							initializeUI();
+					// Create UI elements
+					scoreboard = new Scoreboard();
+					room = new Room();
+					inputField = new InputField();
 
-							// Set up listeners for events
-							initializeHandlers();
-						}
-						else {
+					// Add the user to the scoreboard
+					// TODO Fix this
+					scoreboard.addUser( user.getNickname(), 0 );
 
-							showLoginScreen();
+					// Set up user interface
+					initializeUI();
 
-						}
-					}
-				} );
+					// Set up listeners for events
+					initializeHandlers();
+				}
+				else {
+
+					showLoginScreen();
+
+				}
+			}
+		} );
 	}
 
 	private void showLoginScreen() {
@@ -79,8 +80,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 		// Labels for the login screen
 		Label loginHeader = new Label( "Welcome to Mockery, a-hole." );
-		Label loginInstructions = new Label(
-				"To get started, sign in with your Google account." );
+		Label loginInstructions = new Label( "To get started, sign in with your Google account." );
 		Label loginChallenge = new Label( "Be prepared to bring your A game." );
 
 		// Login button and panel
@@ -124,18 +124,18 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 		// Create a header
 		Label headerLabel = new Label( "Mockery" );
-		
+
 		// Create a logout link
 		Anchor logoutButton = new Anchor( "Sign out" );
 		logoutButton.addStyleName( "logout-button" );
 		logoutButton.setHref( user.getLogoutUrl() );
-		
+
 		// Create the global header panel
 		HorizontalPanel header = new HorizontalPanel();
 		header.addStyleName( "header" );
 		header.add( headerLabel );
 		header.add( logoutButton );
-		
+
 		// Add the Header to the main UI
 		mainDock.addNorth( header, 5 );
 
@@ -174,8 +174,10 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 	@Override
 	public void onMessageReceived( MessagePostedEvent event ) {
-		String newMessage = event.getMessage();
-		room.addMessage( "Me", newMessage );
+
+		//Message newMessage = new Message( event.getMessage(), 1, user );
+		Message newMessage = new Message();
+		newMessage.populate( event.getMessage(), 1, user );
 
 		// Initialize the service proxy.
 		if ( messagePostedSvc == null ) {
@@ -183,18 +185,18 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 		}
 
 		// Set up the callback object.
-		AsyncCallback< Void > callback = new AsyncCallback< Void >() {
+		AsyncCallback< Message > callback = new AsyncCallback< Message >() {
 			public void onFailure( Throwable caught ) {
 				Window.alert( "Something went wrong!" );
 			}
 
-			public void onSuccess( Void result ) {
+			public void onSuccess( Message result ) {
+				room.addMessage( result );
 				Window.alert( "Posted!" );
 			}
 		};
 
 		// Make the call to the stock price service.
-		messagePostedSvc
-				.postMessage( 0, "me", newMessage, callback );
+		messagePostedSvc.postMessage( newMessage, callback );
 	}
 }

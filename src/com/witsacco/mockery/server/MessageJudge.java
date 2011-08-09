@@ -1,5 +1,7 @@
 package com.witsacco.mockery.server;
 
+import com.witsacco.mockery.shared.Message;
+
 public class MessageJudge {
 	
 	

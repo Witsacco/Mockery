@@ -5,7 +5,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.LoginService;
-import com.witsacco.mockery.client.MockeryUser;
+import com.witsacco.mockery.shared.MockeryUser;
 
 @SuppressWarnings( "serial" )
 public class LoginServiceImpl extends RemoteServiceServlet implements
