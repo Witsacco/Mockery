@@ -15,6 +15,16 @@
 		<servlet-name>messagePostedServiceImpl</servlet-name>
 		<url-pattern>/mockery/messagePosted</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>getNewMessagesServiceImpl</servlet-name>
+		<servlet-class>com.witsacco.mockery.server.GetNewMessagesServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>getNewMessagesServiceImpl</servlet-name>
+		<url-pattern>/mockery/getNewMessages</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>loginService</servlet-name>

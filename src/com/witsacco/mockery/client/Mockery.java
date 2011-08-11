@@ -18,7 +18,7 @@ import com.witsacco.mockery.shared.MockeryUser;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Mockery implements EntryPoint, MessagePostedEventHandler {
+public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessagesAvailableEventHandler {
 
 	// An object that represents the current user, logged in or not
 	private MockeryUser user = null;
@@ -26,6 +26,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 	Scoreboard scoreboard;
 	Room room;
 	InputField inputField;
+	MessagePoller poller;
 
 	private MessagePostedServiceAsync messagePostedSvc;
 
@@ -52,7 +53,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 					scoreboard = new Scoreboard();
 					room = new Room();
 					inputField = new InputField();
-
+					poller = new MessagePoller();
+					
 					// Add the user to the scoreboard
 					// TODO Fix this
 					scoreboard.addUser( user.getNickname(), 0 );
@@ -62,6 +64,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 					// Set up listeners for events
 					initializeHandlers();
+					
+					// Start polling for new messages
+					poller.startPolling();
 				}
 				else {
 
@@ -109,6 +114,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 		// Add listener on input field for new messages
 		inputField.addMessageReceivedEventHandler( this );
+		
+		// Add listener on poller for incoming messages
+		poller.addNewMessagesAvailableEventHandler( this );
 	}
 
 	private void initializeUI() {
@@ -198,5 +206,10 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler {
 
 		// Make the call to the stock price service.
 		messagePostedSvc.postMessage( newMessage, callback );
+	}
+
+	@Override
+	public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
+		Window.alert( "Found new messages!" );
 	}
 }
