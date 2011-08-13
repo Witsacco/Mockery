@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.witsacco.mockery.shared.DisplayMessage;
 import com.witsacco.mockery.shared.Message;
 import com.witsacco.mockery.shared.MockeryUser;
 
@@ -56,7 +57,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 					room = new Room();
 					inputField = new InputField();
 					poller = new MessagePoller();
-					
+
 					// Add the user to the scoreboard
 					// TODO Fix this
 					scoreboard.addUser( user.getNickname(), 0 );
@@ -66,7 +67,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 					// Set up listeners for events
 					initializeHandlers();
-					
+
 					// Start polling for new messages
 					poller.startPolling();
 				}
@@ -116,7 +117,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// Add listener on input field for new messages
 		inputField.addMessageReceivedEventHandler( this );
-		
+
 		// Add listener on poller for incoming messages
 		poller.addNewMessagesAvailableEventHandler( this );
 	}
@@ -145,12 +146,12 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		HorizontalPanel header = new HorizontalPanel();
 		header.addStyleName( "header" );
 		header.setSize( "100%", "100%" );
-		
+
 		// Add main title label left aligned
 		header.setVerticalAlignment( HasVerticalAlignment.ALIGN_MIDDLE );
 		header.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_LEFT );
 		header.add( mainTitleLabel );
-		
+
 		// Add "logout" link right aligned
 		header.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_RIGHT );
 		header.add( logoutButton );
@@ -194,7 +195,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	@Override
 	public void onMessageReceived( MessagePostedEvent event ) {
 
-		//Message newMessage = new Message( event.getMessage(), 1, user );
+		// Message newMessage = new Message( event.getMessage(), 1, user );
 		Message newMessage = new Message();
 		newMessage.populate( event.getMessage(), 1, user );
 
@@ -210,8 +211,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 			}
 
 			public void onSuccess( Message result ) {
-				room.addMessage( result );
-				Window.alert( "Posted!" );
+
+				room.addMessage( new DisplayMessage( result ) );
 			}
 		};
 
@@ -221,6 +222,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	@Override
 	public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
-//		Window.alert( "Found new messages!" );
+		for ( DisplayMessage message : event.getNewMessages() ) {
+			room.addMessage( message );
+		}
 	}
 }

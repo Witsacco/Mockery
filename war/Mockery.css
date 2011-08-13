@@ -15,19 +15,16 @@
 
 .page-panel .main-dock .header {
 	background-color: #BBB;
-	font-weight: bold;
 	border-bottom: 2px solid #666;
-	text-align: left;
-	padding-left: 10px;
-	padding-top: 2px;
-	font-size: 20px;
 }
 
 .page-panel .main-dock .header .gwt-Label-main-title {
 	font-size: 18px;
 	font-family: 'Permanent Marker', cursive;
+	padding-left: 15px;
 }
 
 .page-panel .main-dock .header .gwt-Anchor-logout-button {
-	padding-right: 10px;	
+	padding-right: 15px;	
+	font-weight: bold;
 }

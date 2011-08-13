@@ -1,5 +1,7 @@
 package com.witsacco.mockery.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
@@ -8,6 +10,7 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.witsacco.mockery.shared.DisplayMessage;
 
 public class MessagePoller extends Timer implements HasHandlers {
 
@@ -30,13 +33,13 @@ public class MessagePoller extends Timer implements HasHandlers {
 	public void run() {
 
 		// Set up the callback object.
-		AsyncCallback< Void > callback = new AsyncCallback< Void >() {
+		AsyncCallback< ArrayList< DisplayMessage > > callback = new AsyncCallback< ArrayList< DisplayMessage > >() {
 			public void onFailure( Throwable caught ) {
 				Window.alert( "Something went wrong!" );
 			}
 
-			public void onSuccess( Void res ) {
-				fireEvent( new NewMessagesAvailableEvent() );
+			public void onSuccess( ArrayList< DisplayMessage > res ) {
+				fireEvent( new NewMessagesAvailableEvent( res ) );
 			}
 		};
 
@@ -49,9 +52,7 @@ public class MessagePoller extends Timer implements HasHandlers {
 		handlerManager.fireEvent( event );
 	}
 
-	public HandlerRegistration addNewMessagesAvailableEventHandler(
-			NewMessagesAvailableEventHandler handler ) {
-		return handlerManager.addHandler( NewMessagesAvailableEvent.TYPE,
-				handler );
+	public HandlerRegistration addNewMessagesAvailableEventHandler( NewMessagesAvailableEventHandler handler ) {
+		return handlerManager.addHandler( NewMessagesAvailableEvent.TYPE, handler );
 	}
 }

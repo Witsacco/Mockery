@@ -5,17 +5,18 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.witsacco.mockery.shared.DisplayMessage;
 import com.witsacco.mockery.shared.Message;
 
 public class Room {
 
-	ArrayList< Message > messages;
+	ArrayList< DisplayMessage > messages;
 
 	private ScrollPanel mainPanel;
 	private FlexTable messageTable;
 
 	public Room() {
-		messages = new ArrayList< Message >();
+		messages = new ArrayList< DisplayMessage >();
 
 		// Set up the Room UI components
 		initializeUI();
@@ -38,14 +39,15 @@ public class Room {
 		return mainPanel;
 	}
 
-	public void addMessage( Message message ) {
+	public void addMessage( DisplayMessage message ) {
+
 		// Add this message to the room
 		messages.add( message );
 
 		// Redraw this message
 		updateUI( message );
 	}
-
+	
 	//
 	// void updateMessage( Message message ) {
 	// Find the message in messages
@@ -54,10 +56,10 @@ public class Room {
 	//
 	// }
 
-	private void updateUI( Message message ) {
+	private void updateUI( DisplayMessage message ) {
 		final int rowCount = messageTable.getRowCount();
 
-		messageTable.setText( rowCount, 0, message.getAuthor().getNickname() );
+		messageTable.setText( rowCount, 0, message.getNickname() );
 		messageTable.setText( rowCount, 1, message.getBody() );
 
 		// TODO Add a timestamp to this view
@@ -68,6 +70,5 @@ public class Room {
 
 		// Apply row-level formatting
 		messageTable.getRowFormatter().addStyleName( rowCount, ( rowCount % 2 == 0 ? "row-even" : "row-odd" ) );
-
 	}
 }

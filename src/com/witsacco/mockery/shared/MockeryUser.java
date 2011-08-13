@@ -2,8 +2,10 @@ package com.witsacco.mockery.shared;
 
 import java.io.Serializable;
 
-@SuppressWarnings( "serial" )
 public class MockeryUser implements Serializable {
+
+	
+	private static final long serialVersionUID = 1L;
 
 	private boolean loggedIn = false;
 	private String loginUrl;
@@ -50,5 +52,4 @@ public class MockeryUser implements Serializable {
 	public void setNickname( String nickname ) {
 		this.nickname = nickname;
 	}
-
 }

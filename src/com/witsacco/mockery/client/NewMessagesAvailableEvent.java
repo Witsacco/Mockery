@@ -1,13 +1,18 @@
 package com.witsacco.mockery.client;
 
-import com.google.gwt.event.shared.GwtEvent;
+import java.util.ArrayList;
 
-public class NewMessagesAvailableEvent extends
-		GwtEvent< NewMessagesAvailableEventHandler > {
+import com.google.gwt.event.shared.GwtEvent;
+import com.witsacco.mockery.shared.DisplayMessage;
+
+public class NewMessagesAvailableEvent extends GwtEvent< NewMessagesAvailableEventHandler > {
 
 	public static Type< NewMessagesAvailableEventHandler > TYPE = new Type< NewMessagesAvailableEventHandler >();
 
-	public NewMessagesAvailableEvent() {
+	private ArrayList< DisplayMessage > messages;
+
+	public NewMessagesAvailableEvent( ArrayList< DisplayMessage > newOnes ) {
+		messages = newOnes;
 	}
 
 	@Override
@@ -18,5 +23,9 @@ public class NewMessagesAvailableEvent extends
 	@Override
 	protected void dispatch( NewMessagesAvailableEventHandler handler ) {
 		handler.onNewMessagesAvailable( this );
+	}
+
+	public ArrayList< DisplayMessage > getNewMessages() {
+		return messages;
 	}
 }
