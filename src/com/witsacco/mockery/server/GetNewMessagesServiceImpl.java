@@ -10,6 +10,6 @@ public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void getNewMessages() {
-		System.out.println( "Getting new messages" );
+//		System.out.println( "Getting new messages" );
 	}
 }

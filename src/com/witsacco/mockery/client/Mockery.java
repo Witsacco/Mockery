@@ -8,6 +8,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -131,17 +133,26 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		mainDock.addStyleName( "main-dock" );
 
 		// Create a header
-		Label headerLabel = new Label( "Mockery" );
+		Label mainTitleLabel = new Label( "Mockery" );
+		mainTitleLabel.addStyleDependentName( "main-title" );
 
 		// Create a logout link
 		Anchor logoutButton = new Anchor( "Sign out" );
-		logoutButton.addStyleName( "logout-button" );
+		logoutButton.addStyleDependentName( "logout-button" );
 		logoutButton.setHref( user.getLogoutUrl() );
 
 		// Create the global header panel
 		HorizontalPanel header = new HorizontalPanel();
 		header.addStyleName( "header" );
-		header.add( headerLabel );
+		header.setSize( "100%", "100%" );
+		
+		// Add main title label left aligned
+		header.setVerticalAlignment( HasVerticalAlignment.ALIGN_MIDDLE );
+		header.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_LEFT );
+		header.add( mainTitleLabel );
+		
+		// Add "logout" link right aligned
+		header.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_RIGHT );
 		header.add( logoutButton );
 
 		// Add the Header to the main UI
@@ -210,6 +221,6 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	@Override
 	public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
-		Window.alert( "Found new messages!" );
+//		Window.alert( "Found new messages!" );
 	}
 }

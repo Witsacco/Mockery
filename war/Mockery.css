@@ -22,3 +22,12 @@
 	padding-top: 2px;
 	font-size: 20px;
 }
+
+.page-panel .main-dock .header .gwt-Label-main-title {
+	font-size: 18px;
+	font-family: 'Permanent Marker', cursive;
+}
+
+.page-panel .main-dock .header .gwt-Anchor-logout-button {
+	padding-right: 10px;	
+}
