@@ -1,6 +1,7 @@
 package com.witsacco.mockery.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.GwtEvent;
@@ -16,13 +17,17 @@ public class MessagePoller extends Timer implements HasHandlers {
 
 	static final int POLL_INTERVAL = 5000;
 
+	private Date lastChecked;
+	
 	private GetNewMessagesServiceAsync getNewMessagesSvc;
-
 	private HandlerManager handlerManager;
 
 	public MessagePoller() {
 		getNewMessagesSvc = GWT.create( GetNewMessagesService.class );
 		handlerManager = new HandlerManager( this );
+
+		// Initialize the last time we checked for new messages to now
+		lastChecked = new Date();
 	}
 
 	public void startPolling() {
@@ -38,13 +43,21 @@ public class MessagePoller extends Timer implements HasHandlers {
 				Window.alert( "Something went wrong!" );
 			}
 
+			// Handler for successful retrieval of new messages
 			public void onSuccess( ArrayList< DisplayMessage > res ) {
-				fireEvent( new NewMessagesAvailableEvent( res ) );
+
+				// If we found new messages, fire and event for listeners to process
+				if ( res.size() > 0 ) {
+					fireEvent( new NewMessagesAvailableEvent( res ) );
+				}
+				
+				// Update the last time we checked for the next iteration
+				lastChecked = new Date();
 			}
 		};
 
 		// Make the call to the stock price service.
-		getNewMessagesSvc.getNewMessages( callback );
+		getNewMessagesSvc.getNewMessages( lastChecked, callback );
 	}
 
 	@Override
@@ -52,6 +65,7 @@ public class MessagePoller extends Timer implements HasHandlers {
 		handlerManager.fireEvent( event );
 	}
 
+	// Allow listeners to register themselves as listeners for events
 	public HandlerRegistration addNewMessagesAvailableEventHandler( NewMessagesAvailableEventHandler handler ) {
 		return handlerManager.addHandler( NewMessagesAvailableEvent.TYPE, handler );
 	}

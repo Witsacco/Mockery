@@ -179,15 +179,6 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		rp.add( pagePanel );
 	}
 
-	public void createMessage() {
-
-	}
-
-	// public void createMessageCallback() {
-	// room.addMessage();
-	// room.redraw();
-	// }
-
 	public void updateMessage() {
 
 	}
@@ -196,8 +187,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	public void onMessageReceived( MessagePostedEvent event ) {
 
 		// Message newMessage = new Message( event.getMessage(), 1, user );
-		Message newMessage = new Message();
-		newMessage.populate( event.getMessage(), 1, user );
+		Message newMessage = new Message( event.getMessage(), 1, user );
 
 		// Initialize the service proxy.
 		if ( messagePostedSvc == null ) {

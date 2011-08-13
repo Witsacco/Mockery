@@ -1,5 +1,7 @@
 package com.witsacco.mockery.server;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.List;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
@@ -21,30 +22,34 @@ public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements G
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public ArrayList< DisplayMessage > getNewMessages() {
+	public ArrayList< DisplayMessage > getNewMessages( Date cutoff ) {
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		// For now just use room number 1
 		Key persistanceKey = KeyFactory.createKey( "MessageRoom", 1 );
 
-		Query query = new Query( "PostedMessage", persistanceKey ).addSort( "date", Query.SortDirection.DESCENDING );
+		Query query = new Query( "PostedMessage", persistanceKey );
 
-		List< Entity > messages = datastore.prepare( query ).asList( FetchOptions.Builder.withLimit( 5 ) );
+		// Add a filter for messages greater than the cutoff
+		query.addFilter( "date", Query.FilterOperator.GREATER_THAN, cutoff );
+
+		// Sort the new messages in descending order by date
+		query.addSort( "date", Query.SortDirection.DESCENDING );
+
+		// Retrieve the new messages from the query (limit to 10 for now)
+		List< Entity > messages = datastore.prepare( query ).asList( withLimit( 10 ) );
 
 		ArrayList< DisplayMessage > foundMessages = new ArrayList< DisplayMessage >();
-		
+
 		if ( messages.isEmpty() ) {
 			System.out.println( "No messages found" );
 		}
 		else {
 			for ( Entity message : messages ) {
 				User user = ( User ) message.getProperty( "user" );
-				Date date = ( Date ) message.getProperty( "date" );
 				String messageBody = ( String ) message.getProperty( "message" );
-				
-				//TODO Add logic for only getting recent messages
-				
+
 				foundMessages.add( new DisplayMessage( user.getNickname(), messageBody ) );
 			}
 		}

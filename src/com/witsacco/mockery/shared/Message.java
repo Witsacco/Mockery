@@ -14,20 +14,22 @@ public class Message implements Serializable {
 	int roomId;
 	int id;
 
-	// public Message( String body, int roomId, MockeryUser user ) {
-	// this.createTime = new Date();
-	//
-	// this.body = body;
-	// this.roomId = roomId;
-	// this.author = user;
-	//
-	// //TODO generate message ID
-	// }
-
+	// Empty constructor.  Needed for RPC serialization
 	public Message() {
 
 	}
 
+	// Non-empty constructor. For use outside RPT serialization
+	 public Message( String body, int roomId, MockeryUser user ) {
+		 this.createTime = new Date();
+		
+		 this.body = body;
+		 this.roomId = roomId;
+		 this.author = user;
+		
+		 //TODO generate message ID
+	 }
+	
 	public void populate( String body, int roomId, MockeryUser user ) {
 		this.createTime = new Date();
 
