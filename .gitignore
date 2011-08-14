@@ -1,3 +1,4 @@
+.classpath
 .gwt/.gwt-log
 war/mockery/*
 war/WEB-INF/appengine-generated
