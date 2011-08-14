@@ -22,6 +22,7 @@
 .room-panel .message-table .sender-col {
 	font-weight: bold;
 	padding: 5px;
+	width: 125px;
 }
 
 .room-panel .message-table .content-col {
