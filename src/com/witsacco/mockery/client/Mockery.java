@@ -25,7 +25,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	// An object that represents the current user, logged in or not
 	private MockeryUser user = null;
-
+	
 	Scoreboard scoreboard;
 	Room room;
 	InputField inputField;
@@ -42,42 +42,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		LoginServiceAsync loginService = GWT.create( LoginService.class );
 
 		// Attempt to log the user in
-		loginService.login( GWT.getHostPageBaseURL(), new AsyncCallback< MockeryUser >() {
-			public void onFailure( Throwable error ) {
-				// TODO Handle an error on login more elegantly
-				Window.alert( error.getMessage() );
-			}
-
-			public void onSuccess( MockeryUser result ) {
-				user = result;
-				if ( user.isLoggedIn() ) {
-
-					// Create UI elements
-					scoreboard = new Scoreboard();
-					room = new Room();
-					inputField = new InputField();
-					poller = new MessagePoller();
-
-					// Add the user to the scoreboard
-					// TODO Fix this
-					scoreboard.addUser( user.getNickname(), 0 );
-
-					// Set up user interface
-					initializeUI();
-
-					// Set up listeners for events
-					initializeHandlers();
-
-					// Start polling for new messages
-					poller.startPolling();
-				}
-				else {
-
-					showLoginScreen();
-
-				}
-			}
-		} );
+		loginService.login( GWT.getHostPageBaseURL(), new LoginHandler() );
 	}
 
 	private void showLoginScreen() {
@@ -214,6 +179,47 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
 		for ( DisplayMessage message : event.getNewMessages() ) {
 			room.addMessage( message );
+		}
+	}
+	
+	/**
+	 * Private inner class which implements the callback for logging in.
+	 * On successful login, this will initialize Mockery for use
+	 */
+	private class LoginHandler implements AsyncCallback< MockeryUser > {
+
+		public void onFailure( Throwable error ) {
+			// TODO Handle an error on login more elegantly
+			Window.alert( error.getMessage() );
+		}
+
+		public void onSuccess( MockeryUser result ) {
+			user = result;
+
+			if ( user.isLoggedIn() ) {
+
+				// Create UI elements
+				scoreboard = new Scoreboard();
+				room = new Room();
+				inputField = new InputField();
+				poller = new MessagePoller();
+
+				// Add the user to the scoreboard
+				// TODO Fix this
+				scoreboard.addUser( user.getNickname(), 0 );
+
+				// Set up user interface
+				initializeUI();
+
+				// Set up listeners for events
+				initializeHandlers();
+
+				// Start polling for new messages
+				poller.startPolling();
+			}
+			else {
+				showLoginScreen();
+			}
 		}
 	}
 }
