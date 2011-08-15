@@ -1,4 +1,4 @@
-package com.witsacco.mockery.shared;
+package com.witsacco.mockery.client;
 
 import java.io.Serializable;
 

@@ -11,18 +11,22 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.witsacco.mockery.shared.DisplayMessage;
 
 public class MessagePoller extends Timer implements HasHandlers {
 
-	static final int POLL_INTERVAL = 5000;
+	// Poll for new messages every three seconds
+	private static final int POLL_INTERVAL = 3000;
+
+	private int roomId;
 
 	private Date lastChecked;
-	
+
 	private GetNewMessagesServiceAsync getNewMessagesSvc;
 	private HandlerManager handlerManager;
 
-	public MessagePoller() {
+	public MessagePoller( int roomId ) {
+		this.roomId = roomId;
+
 		getNewMessagesSvc = GWT.create( GetNewMessagesService.class );
 		handlerManager = new HandlerManager( this );
 
@@ -46,18 +50,19 @@ public class MessagePoller extends Timer implements HasHandlers {
 			// Handler for successful retrieval of new messages
 			public void onSuccess( ArrayList< DisplayMessage > res ) {
 
-				// If we found new messages, fire and event for listeners to process
+				// If we found new messages, fire and event for listeners to
+				// process
 				if ( res.size() > 0 ) {
 					fireEvent( new NewMessagesAvailableEvent( res ) );
 				}
-				
+
 				// Update the last time we checked for the next iteration
 				lastChecked = new Date();
 			}
 		};
 
 		// Make the call to the stock price service.
-		getNewMessagesSvc.getNewMessages( lastChecked, callback );
+		getNewMessagesSvc.getNewMessages( roomId, lastChecked, callback );
 	}
 
 	@Override

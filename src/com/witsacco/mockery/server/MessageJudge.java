@@ -6,7 +6,6 @@ import org.apache.commons.lang.StringUtils;
 import org.xeustechnologies.googleapi.spelling.SpellChecker;
 import org.xeustechnologies.googleapi.spelling.SpellResponse;
 
-import com.witsacco.mockery.shared.Message;
 
 public class MessageJudge {
 

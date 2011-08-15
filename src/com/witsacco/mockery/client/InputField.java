@@ -108,10 +108,10 @@ public class InputField implements HasHandlers {
 		return inputArea.getText();
 	}
 
-	private boolean isValid( String text ) {
-		// TODO implement input validation logic (FieldVerifier?)
-		return true;
-	}
+//	private boolean isValid( String text ) {
+//		// TODO implement input validation logic (FieldVerifier?)
+//		return true;
+//	}
 
 	@Override
 	public void fireEvent( GwtEvent< ? > event ) {

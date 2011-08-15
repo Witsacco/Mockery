@@ -11,35 +11,41 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.witsacco.mockery.client.DisplayMessage;
 import com.witsacco.mockery.client.MessagePostedService;
-import com.witsacco.mockery.shared.Message;
 
 public class MessagePostedServiceImpl extends RemoteServiceServlet implements MessagePostedService {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Message postMessage( Message message ) {
+	public DisplayMessage postMessage( int roomId, String messageBody ) {
 
 		// Grab the current user
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		
-		// Grab the room ID passed to this request
-		Key persistanceKey = KeyFactory.createKey( "MessageRoom", message.getRoomId() );
 
-		// Create a new entity to store to the database
-		Entity postedMessage = new Entity( "PostedMessage", persistanceKey );
-		postedMessage.setProperty( "user", user );
-		postedMessage.setProperty( "date", new Date() );
-		postedMessage.setProperty( "message", message.getBody() );
+		// Create the context for the room
+		Key roomKey = KeyFactory.createKey( "Room", roomId );
 
-		// Store the data
+		// Create the message to persist in this room
+		Entity message = new Entity( "Message", roomKey );
+		message.setProperty( "user", user );
+		message.setProperty( "body", messageBody );
+		message.setProperty( "createTime", new Date() );
+
+		// Get a handle to the datastore
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put( postedMessage );
+
+		// Store the message and grab its key
+		Key messageKey = datastore.put( message );
+
+		System.out.println( roomKey );
+		System.out.println( message );
+		System.out.println( messageKey );
 
 		// Return the message to the client for display
-		return message;
+		return new DisplayMessage( messageKey.getId(), roomId, messageBody, user.getNickname() );
 
 	}
 }

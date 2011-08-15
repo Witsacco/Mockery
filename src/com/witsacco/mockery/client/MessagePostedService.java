@@ -2,15 +2,15 @@ package com.witsacco.mockery.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.witsacco.mockery.shared.Message;
 
 @RemoteServiceRelativePath( "messagePosted" )
 public interface MessagePostedService extends RemoteService {
 
 	/*
-	 * This accepts a message to be persisted and returns the message on
-	 * successful save.
+	 * This accepts the content of a message to be created and the id of the
+	 * room within which to create it, then persists the message, and returns a
+	 * DisplayMessage for display in the UI.
 	 */
-	public Message postMessage( Message message );
+	public DisplayMessage postMessage( int roomId, String messageBody );
 
 }

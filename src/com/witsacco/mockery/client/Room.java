@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.witsacco.mockery.shared.DisplayMessage;
-import com.witsacco.mockery.shared.Message;
 
 public class Room {
 
@@ -40,6 +38,10 @@ public class Room {
 	}
 
 	public void addMessage( DisplayMessage message ) {
+		
+		// Emit an event to request a score for this message
+		//RequestMessageScoreEvent scoreRequest = new RequestMessageScoreEvent ( message.id );
+        //fireEvent( newPostEvent );
 
 		// Add this message to the room
 		messages.add( message );
@@ -59,7 +61,7 @@ public class Room {
 	private void updateUI( DisplayMessage message ) {
 		final int rowCount = messageTable.getRowCount();
 
-		messageTable.setText( rowCount, 0, message.getNickname() );
+		messageTable.setText( rowCount, 0, message.getAuthorName() );
 		messageTable.setText( rowCount, 1, message.getBody() );
 
 		// TODO Add a timestamp to this view

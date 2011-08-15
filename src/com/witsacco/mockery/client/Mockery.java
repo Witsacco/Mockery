@@ -14,9 +14,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.witsacco.mockery.shared.DisplayMessage;
-import com.witsacco.mockery.shared.Message;
-import com.witsacco.mockery.shared.MockeryUser;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -26,6 +23,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	// An object that represents the current user, logged in or not
 	private MockeryUser user = null;
 	
+	// For right now, we only have one room
+	private final int ROOM_ID = 1;
+
 	Scoreboard scoreboard;
 	Room room;
 	InputField inputField;
@@ -152,7 +152,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	public void onMessageReceived( MessagePostedEvent event ) {
 
 		// Message newMessage = new Message( event.getMessage(), 1, user );
-		Message newMessage = new Message( event.getMessage(), 1, user );
+		// Message newMessage = new Message( event.getMessage(), 1, user );
 
 		// Initialize the service proxy.
 		if ( messagePostedSvc == null ) {
@@ -160,19 +160,19 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		}
 
 		// Set up the callback object.
-		AsyncCallback< Message > callback = new AsyncCallback< Message >() {
+		AsyncCallback< DisplayMessage > callback = new AsyncCallback< DisplayMessage >() {
 			public void onFailure( Throwable caught ) {
 				Window.alert( "Something went wrong!" );
 			}
 
-			public void onSuccess( Message result ) {
+			public void onSuccess( DisplayMessage result ) {
 
-				room.addMessage( new DisplayMessage( result ) );
+				room.addMessage( result );
 			}
 		};
 
-		// Make the call to the stock price service.
-		messagePostedSvc.postMessage( newMessage, callback );
+		// Call the MessagePostedService
+		messagePostedSvc.postMessage( ROOM_ID, event.getMessage(), callback );
 	}
 
 	@Override
@@ -181,10 +181,10 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 			room.addMessage( message );
 		}
 	}
-	
+
 	/**
-	 * Private inner class which implements the callback for logging in.
-	 * On successful login, this will initialize Mockery for use
+	 * Private inner class which implements the callback for logging in. On
+	 * successful login, this will initialize Mockery for use
 	 */
 	private class LoginHandler implements AsyncCallback< MockeryUser > {
 
@@ -202,7 +202,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 				scoreboard = new Scoreboard();
 				room = new Room();
 				inputField = new InputField();
-				poller = new MessagePoller();
+				poller = new MessagePoller( ROOM_ID );
 
 				// Add the user to the scoreboard
 				// TODO Fix this

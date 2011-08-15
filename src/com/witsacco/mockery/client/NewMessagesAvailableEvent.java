@@ -3,7 +3,6 @@ package com.witsacco.mockery.client;
 import java.util.ArrayList;
 
 import com.google.gwt.event.shared.GwtEvent;
-import com.witsacco.mockery.shared.DisplayMessage;
 
 public class NewMessagesAvailableEvent extends GwtEvent< NewMessagesAvailableEventHandler > {
 
