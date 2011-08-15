@@ -61,7 +61,16 @@ public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements G
 			if ( !postedBy.equals( user ) ) {
 
 				// Create a new DisplayMessage and add it to the result set
-				foundMessages.add( new DisplayMessage( id, roomId, messageBody, postedBy.getNickname() ) );
+
+				if ( message.getProperties().containsKey( "score" ) ) {
+					Integer score = new Integer( message.getProperty( "score" ) + "" ); // TODO Cleanup this hack
+					String scoreReason = ( String ) message.getProperty( "scoreReason" );
+					foundMessages.add( new DisplayMessage( id, roomId, messageBody, postedBy.getNickname(), score,
+							scoreReason ) );
+				}
+				else {
+					foundMessages.add( new DisplayMessage( id, roomId, messageBody, postedBy.getNickname() ) );
+				}
 			}
 		}
 

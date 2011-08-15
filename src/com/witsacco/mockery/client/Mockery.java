@@ -165,7 +165,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 				Window.alert( "Something went wrong!" );
 			}
 
-			public void onSuccess( DisplayMessage result ) {
+			public void onSuccess( final DisplayMessage result ) {
 
 				// Score the new message
 				// TODO Clean this up!
@@ -176,7 +176,10 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 					}
 
 					public void onSuccess( MessageScore score ) {
-						// Do something.
+						result.setScore( score.getScore() );
+						result.setScoreReason( score.getExplanation() );
+						
+						room.updateMessage( result );
 					}
 				} );
 

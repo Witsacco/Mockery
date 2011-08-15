@@ -28,9 +28,9 @@ public class Room {
 		messageTable.addStyleName( "message-table" );
 
 		mainPanel.add( messageTable );
-		
-//		addMessage( "Rich", "The Mets rule" );
-//		addMessage( "Dom", "The Mets suck" );
+
+		// addMessage( "Rich", "The Mets rule" );
+		// addMessage( "Dom", "The Mets suck" );
 	}
 
 	public Widget getPanel() {
@@ -38,39 +38,47 @@ public class Room {
 	}
 
 	public void addMessage( DisplayMessage message ) {
-		
+
 		// Emit an event to request a score for this message
-		//RequestMessageScoreEvent scoreRequest = new RequestMessageScoreEvent ( message.id );
-        //fireEvent( newPostEvent );
+		// RequestMessageScoreEvent scoreRequest = new RequestMessageScoreEvent
+		// ( message.id );
+		// fireEvent( newPostEvent );
 
 		// Add this message to the room
 		messages.add( message );
 
-		// Redraw this message
-		updateUI( message );
+		// Draw this message
+		updateUI( message, messageTable.getRowCount() );
 	}
-	
-	//
-	// void updateMessage( Message message ) {
-	// Find the message in messages
-	// Swap it or set the score
-	// Update UI
-	//
-	// }
 
-	private void updateUI( DisplayMessage message ) {
-		final int rowCount = messageTable.getRowCount();
+	void updateMessage( DisplayMessage message ) {
+		// Find the message in the list of messages and update its row
+		updateUI( message, messages.indexOf( message ) );
+	}
 
-		messageTable.setText( rowCount, 0, message.getAuthorName() );
-		messageTable.setText( rowCount, 1, message.getBody() );
+	private void updateUI( DisplayMessage message, int rowId ) {
+		// Set message author and body
+		messageTable.setText( rowId, 0, message.getAuthorName() );
+		messageTable.setText( rowId, 1, message.getBody() );
+
+		// Apply cell-level formatting
+		messageTable.getCellFormatter().addStyleName( rowId, 0, "sender-col" );
+		messageTable.getCellFormatter().addStyleName( rowId, 1, "content-col" );
+
+		if ( message.getScore() == null ) {
+			// This message doesn't have a score, show a spinner
+			messageTable.setText( rowId, 2, "" );
+			messageTable.getCellFormatter().setStyleName( rowId, 2, "spinner" );
+		}
+		else {
+			// This message has been scored, update it appropriately
+			messageTable.setText( rowId, 2, message.getScore() );
+			messageTable.getCellFormatter().setStyleName( rowId, 2, "score-col" );
+		}
 
 		// TODO Add a timestamp to this view
 
-		// Apply cell-level formatting
-		messageTable.getCellFormatter().addStyleName( rowCount, 0, "sender-col" );
-		messageTable.getCellFormatter().addStyleName( rowCount, 1, "content-col" );
-
 		// Apply row-level formatting
-		messageTable.getRowFormatter().addStyleName( rowCount, ( rowCount % 2 == 0 ? "row-even" : "row-odd" ) );
+		messageTable.getRowFormatter().addStyleName( rowId, ( rowId % 2 == 0 ? "row-even" : "row-odd" ) );
 	}
 }

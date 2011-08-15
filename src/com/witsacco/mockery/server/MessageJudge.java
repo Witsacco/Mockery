@@ -53,8 +53,6 @@ public class MessageJudge {
 
 		SpellCorrection[] corrections = spellResponse.getCorrections();
 
-		System.out.println( corrections );
-
 		if ( null == corrections ) {
 			return false;
 		}

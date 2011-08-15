@@ -24,8 +24,12 @@ public class DisplayMessage implements Serializable {
 	// The author's name
 	private String authorName;
 
-	// This message's score
-	private int score;
+	// This message's score (note: this is an Integer so we can use null to mean
+	// "not scored"
+	private Integer score;
+
+	// This message's score reason
+	private String scoreReason;
 
 	public DisplayMessage() {
 		// This no-argument constructor is necessary so this class can be used
@@ -43,6 +47,23 @@ public class DisplayMessage implements Serializable {
 		this.roomId = roomId;
 		this.body = body;
 		this.authorName = authorName;
+	}
+
+	/**
+	 * @param messageId
+	 * @param roomId
+	 * @param body
+	 * @param authorName
+	 * @param score
+	 * @param scoreReason
+	 */
+	public DisplayMessage( long messageId, int roomId, String body, String authorName, Integer score, String scoreReason ) {
+		this.messageId = messageId;
+		this.roomId = roomId;
+		this.body = body;
+		this.authorName = authorName;
+		this.score = score;
+		this.scoreReason = scoreReason;
 	}
 
 	/**
@@ -108,16 +129,41 @@ public class DisplayMessage implements Serializable {
 	/**
 	 * @return the score
 	 */
-	public int getScore() {
-		return score;
+	public String getScore() {
+		if ( null == score )
+			return null;
+
+		return score.toString();
 	}
 
 	/**
 	 * @param score
 	 *            the score to set
 	 */
-	public void setScore( int score ) {
+	public void setScore( Integer score ) {
 		this.score = score;
+	}
+
+	/**
+	 * @return the scoreReason
+	 */
+	public String getScoreReason() {
+		return scoreReason;
+	}
+
+	/**
+	 * @param scoreReason
+	 *            the scoreReason to set
+	 */
+	public void setScoreReason( String scoreReason ) {
+		this.scoreReason = scoreReason;
+	}
+
+	/*
+	 * Defines equality for DisplayMessages to be if they have the same ID.
+	 */
+	public boolean equals( DisplayMessage message ) {
+		return ( this.messageId == message.getMessageId() );
 	}
 
 }

@@ -6,6 +6,9 @@ public class MessageScore implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// The message this score is for
+	private long messageId;
+
 	private int score;
 	private String explanation;
 
@@ -21,6 +24,20 @@ public class MessageScore implements Serializable {
 	public MessageScore( int score, String explanation ) {
 		this.score = score;
 		this.explanation = explanation;
+	}
+
+	/**
+	 * @return the messageId
+	 */
+	public long getMessageId() {
+		return messageId;
+	}
+
+	/**
+	 * @param messageId the messageId to set
+	 */
+	public void setMessageId( long messageId ) {
+		this.messageId = messageId;
 	}
 
 	/**

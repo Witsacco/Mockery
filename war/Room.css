@@ -28,3 +28,13 @@
 .room-panel .message-table .content-col {
 	padding: 5px;
 }
+
+.room-panel .message-table .score-col {
+	padding-right: 3px;
+	font-weight: bold;
+}
+
+.spinner {
+	background: url(spinner.gif) center no-repeat;
+	padding-right: 3px;
+}

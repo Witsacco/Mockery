@@ -13,7 +13,7 @@
 
 	<servlet-mapping>
 		<servlet-name>messagePostedServiceImpl</servlet-name>
-		<url-pattern>/mockery/messagePosted</url-pattern>
+		<url-pattern>/mockery/postMessage</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -33,7 +33,7 @@
 
 	<servlet-mapping>
 		<servlet-name>messageScoreServiceImpl</servlet-name>
-		<url-pattern>/mockery/scoreThisMessage</url-pattern>
+		<url-pattern>/mockery/scoreMessage</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

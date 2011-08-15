@@ -17,13 +17,11 @@ public class MessageScoreServiceImpl extends RemoteServiceServlet implements Mes
 	private static final MessageJudge JUDGE = MessageJudge.getInstance();
 
 	/*
-	 * Scores a message given its id. Returns null if the message cannot be
-	 * found.
+	 * Scores a message given its id and the id of the room it belongs to.
+	 * Returns null if an error code, otherwise the score object.
 	 */
 	@Override
 	public MessageScore scoreMessage( int roomId, long messageId ) {
-		MessageScore result = null;
-
 		// Get a handle for the datastore
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -35,22 +33,17 @@ public class MessageScoreServiceImpl extends RemoteServiceServlet implements Mes
 			message = datastore.get( KeyFactory.createKey( roomKey, "Message", messageId ) );
 		}
 		catch ( EntityNotFoundException e ) {
-			// TODO Better handle this error, and probably return null
 			e.printStackTrace();
 
 			return null;
 		}
 
-		System.out.println( message );
-
-		result = JUDGE.evaluateMessage( ( String ) message.getProperty( "body" ) );
+		MessageScore result = JUDGE.evaluateMessage( ( String ) message.getProperty( "body" ) );
 
 		message.setProperty( "score", result.getScore() );
 		message.setProperty( "scoreReason", result.getExplanation() );
 
 		datastore.put( message );
-
-		System.out.println( message );
 
 		return result;
 
