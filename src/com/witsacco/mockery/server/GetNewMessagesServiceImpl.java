@@ -49,8 +49,6 @@ public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements G
 		// Create a place to hold new messages
 		ArrayList< DisplayMessage > foundMessages = new ArrayList< DisplayMessage >();
 
-		System.out.println( query );
-
 		// Iterate through the set of messages we found
 		for ( Entity message : messages ) {
 

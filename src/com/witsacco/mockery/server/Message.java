@@ -9,6 +9,7 @@ import javax.persistence.Id;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
+import com.witsacco.mockery.client.MessageScore;
 
 @Entity
 public class Message {

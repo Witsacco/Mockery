@@ -26,9 +26,10 @@ public class DisplayMessage implements Serializable {
 
 	// This message's score
 	private int score;
-	
+
 	public DisplayMessage() {
-		// This no-argument constructor is necessary so this class can be used in the MessagePostedService.
+		// This no-argument constructor is necessary so this class can be used
+		// in the MessagePostedService.
 	}
 
 	/**
@@ -52,7 +53,8 @@ public class DisplayMessage implements Serializable {
 	}
 
 	/**
-	 * @param messageId the messageId to set
+	 * @param messageId
+	 *            the messageId to set
 	 */
 	public void setMessageId( long messageId ) {
 		this.messageId = messageId;
@@ -66,7 +68,8 @@ public class DisplayMessage implements Serializable {
 	}
 
 	/**
-	 * @param roomId the roomId to set
+	 * @param roomId
+	 *            the roomId to set
 	 */
 	public void setRoomId( int roomId ) {
 		this.roomId = roomId;
@@ -80,7 +83,8 @@ public class DisplayMessage implements Serializable {
 	}
 
 	/**
-	 * @param body the body to set
+	 * @param body
+	 *            the body to set
 	 */
 	public void setBody( String body ) {
 		this.body = body;
@@ -94,7 +98,8 @@ public class DisplayMessage implements Serializable {
 	}
 
 	/**
-	 * @param authorName the authorName to set
+	 * @param authorName
+	 *            the authorName to set
 	 */
 	public void setAuthorName( String authorName ) {
 		this.authorName = authorName;
@@ -108,7 +113,8 @@ public class DisplayMessage implements Serializable {
 	}
 
 	/**
-	 * @param score the score to set
+	 * @param score
+	 *            the score to set
 	 */
 	public void setScore( int score ) {
 		this.score = score;

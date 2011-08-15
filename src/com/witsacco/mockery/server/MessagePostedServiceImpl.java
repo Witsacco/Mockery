@@ -40,10 +40,6 @@ public class MessagePostedServiceImpl extends RemoteServiceServlet implements Me
 		// Store the message and grab its key
 		Key messageKey = datastore.put( message );
 
-		System.out.println( roomKey );
-		System.out.println( message );
-		System.out.println( messageKey );
-
 		// Return the message to the client for display
 		return new DisplayMessage( messageKey.getId(), roomId, messageBody, user.getNickname() );
 

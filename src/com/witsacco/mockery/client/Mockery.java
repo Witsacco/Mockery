@@ -22,7 +22,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	// An object that represents the current user, logged in or not
 	private MockeryUser user = null;
-	
+
 	// For right now, we only have one room
 	private final int ROOM_ID = 1;
 
@@ -167,6 +167,20 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 			public void onSuccess( DisplayMessage result ) {
 
+				// Score the new message
+				// TODO Clean this up!
+				MessageScoreServiceAsync scoringSvc = GWT.create( MessageScoreService.class );
+				scoringSvc.scoreMessage( ROOM_ID, result.getMessageId(), new AsyncCallback< MessageScore >() {
+					public void onFailure( Throwable caught ) {
+						Window.alert( "Something went wrong in the scoring service" );
+					}
+
+					public void onSuccess( MessageScore score ) {
+						// Do something.
+					}
+				} );
+
+				// Add the message to the room
 				room.addMessage( result );
 			}
 		};
