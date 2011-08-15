@@ -41,7 +41,7 @@ public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements G
 		query.addFilter( "createTime", Query.FilterOperator.GREATER_THAN, cutoff );
 
 		// Sort the new messages in descending order by date
-		query.addSort( "createTime", Query.SortDirection.DESCENDING );
+		query.addSort( "createTime", Query.SortDirection.ASCENDING );
 
 		// Retrieve the new messages from the query (limit to 10 for now)
 		List< Entity > messages = datastore.prepare( query ).asList( withLimit( 10 ) );
