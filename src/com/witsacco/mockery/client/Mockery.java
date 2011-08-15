@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessagesAvailableEventHandler {
 
+	//
 	// An object that represents the current user, logged in or not
 	private MockeryUser user = null;
 
