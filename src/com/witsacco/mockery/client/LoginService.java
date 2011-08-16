@@ -6,6 +6,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath( "login" )
 public interface LoginService extends RemoteService {
 
-	public MockeryUser login( String requestUri );
+	public LoginInfo login( String requestUri, int roomId );
 
 }

@@ -162,8 +162,14 @@ public class DisplayMessage implements Serializable {
 	/*
 	 * Defines equality for DisplayMessages to be if they have the same ID.
 	 */
-	public boolean equals( DisplayMessage message ) {
-		return ( this.messageId == message.getMessageId() );
+	public boolean equals( Object obj ) {
+
+		if ( obj instanceof DisplayMessage ) {
+			return ( this.messageId == ( ( DisplayMessage ) obj ).getMessageId() );
+		}
+
+		return super.equals( obj );
+
 	}
 
 }

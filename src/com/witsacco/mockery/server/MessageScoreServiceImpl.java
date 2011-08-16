@@ -1,5 +1,7 @@
 package com.witsacco.mockery.server;
 
+import java.util.Date;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -42,6 +44,7 @@ public class MessageScoreServiceImpl extends RemoteServiceServlet implements Mes
 
 		message.setProperty( "score", result.getScore() );
 		message.setProperty( "scoreReason", result.getExplanation() );
+		message.setProperty( "updateTime", new Date() );
 
 		datastore.put( message );
 

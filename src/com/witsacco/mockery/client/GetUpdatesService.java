@@ -6,9 +6,9 @@ import java.util.Date;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath( "getNewMessages" )
-public interface GetNewMessagesService extends RemoteService {
+@RemoteServiceRelativePath( "getRoomUpdates" )
+public interface GetUpdatesService extends RemoteService {
 
-	public ArrayList< DisplayMessage > getNewMessages( int roomId, Date d );
+	public ArrayList< DisplayMessage > getUpdates( int roomId, Date d );
 
 }

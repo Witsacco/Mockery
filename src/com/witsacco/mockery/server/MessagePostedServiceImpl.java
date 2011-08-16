@@ -25,6 +25,9 @@ public class MessagePostedServiceImpl extends RemoteServiceServlet implements Me
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 
+		// Get the current time
+		Date time = new Date();
+
 		// Create the context for the room
 		Key roomKey = KeyFactory.createKey( "Room", roomId );
 
@@ -32,7 +35,8 @@ public class MessagePostedServiceImpl extends RemoteServiceServlet implements Me
 		Entity message = new Entity( "Message", roomKey );
 		message.setProperty( "user", user );
 		message.setProperty( "body", messageBody );
-		message.setProperty( "createTime", new Date() );
+		message.setProperty( "createTime", time );
+		message.setProperty( "updateTime", time );
 
 		// Get a handle to the datastore
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

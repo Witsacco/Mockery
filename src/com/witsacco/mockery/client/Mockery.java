@@ -22,7 +22,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	//
 	// An object that represents the current user, logged in or not
-	private MockeryUser user = null;
+	private LoginInfo user = null;
 
 	// For right now, we only have one room
 	private final int ROOM_ID = 1;
@@ -30,7 +30,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	Scoreboard scoreboard;
 	Room room;
 	InputField inputField;
-	MessagePoller poller;
+	UpdatePoller poller;
 
 	private MessagePostedServiceAsync messagePostedSvc;
 
@@ -43,7 +43,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		LoginServiceAsync loginService = GWT.create( LoginService.class );
 
 		// Attempt to log the user in
-		loginService.login( GWT.getHostPageBaseURL(), new LoginHandler() );
+		loginService.login( GWT.getHostPageBaseURL(), ROOM_ID, new LoginHandler() );
 	}
 
 	private void showLoginScreen() {
@@ -180,7 +180,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 						result.setScore( score.getScore() );
 						result.setScoreReason( score.getExplanation() );
 						
-						room.updateMessage( result );
+						room.handleIncomingMessage( result );
 					}
 				} );
 
@@ -196,7 +196,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	@Override
 	public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
 		for ( DisplayMessage message : event.getNewMessages() ) {
-			room.addMessage( message );
+			room.handleIncomingMessage( message );
 		}
 	}
 
@@ -204,14 +204,14 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	 * Private inner class which implements the callback for logging in. On
 	 * successful login, this will initialize Mockery for use
 	 */
-	private class LoginHandler implements AsyncCallback< MockeryUser > {
+	private class LoginHandler implements AsyncCallback< LoginInfo > {
 
 		public void onFailure( Throwable error ) {
 			// TODO Handle an error on login more elegantly
 			Window.alert( error.getMessage() );
 		}
 
-		public void onSuccess( MockeryUser result ) {
+		public void onSuccess( LoginInfo result ) {
 			user = result;
 
 			if ( user.isLoggedIn() ) {
@@ -220,7 +220,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 				scoreboard = new Scoreboard();
 				room = new Room();
 				inputField = new InputField();
-				poller = new MessagePoller( ROOM_ID );
+				poller = new UpdatePoller( ROOM_ID );
 
 				// Add the user to the scoreboard
 				// TODO Fix this

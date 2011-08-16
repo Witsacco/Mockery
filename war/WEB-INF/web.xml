@@ -17,13 +17,13 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>getNewMessagesServiceImpl</servlet-name>
-		<servlet-class>com.witsacco.mockery.server.GetNewMessagesServiceImpl</servlet-class>
+		<servlet-name>getUpdatesServiceImpl</servlet-name>
+		<servlet-class>com.witsacco.mockery.server.GetUpdatesServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>getNewMessagesServiceImpl</servlet-name>
-		<url-pattern>/mockery/getNewMessages</url-pattern>
+		<servlet-name>getUpdatesServiceImpl</servlet-name>
+		<url-pattern>/mockery/getRoomUpdates</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

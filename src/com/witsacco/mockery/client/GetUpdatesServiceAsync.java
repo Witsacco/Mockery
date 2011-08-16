@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface GetNewMessagesServiceAsync {
+public interface GetUpdatesServiceAsync {
 
-	public void getNewMessages( int roomId, Date d, AsyncCallback< ArrayList< DisplayMessage > > callback );
+	public void getUpdates( int roomId, Date d, AsyncCallback< ArrayList< DisplayMessage > > callback );
 }

@@ -39,11 +39,6 @@ public class Room {
 
 	public void addMessage( DisplayMessage message ) {
 
-		// Emit an event to request a score for this message
-		// RequestMessageScoreEvent scoreRequest = new RequestMessageScoreEvent
-		// ( message.id );
-		// fireEvent( newPostEvent );
-
 		// Add this message to the room
 		messages.add( message );
 
@@ -51,9 +46,18 @@ public class Room {
 		updateUI( message, messageTable.getRowCount() );
 	}
 
-	void updateMessage( DisplayMessage message ) {
-		// Find the message in the list of messages and update its row
-		updateUI( message, messages.indexOf( message ) );
+	public void handleIncomingMessage( DisplayMessage message ) {
+		int index = messages.indexOf( message );
+
+		if ( index == -1 ) {
+			addMessage( message );
+		}
+		else {
+			messages.set( index, message );
+			
+			// Find the message in the list of messages and update its row
+			updateUI( message, index );
+		}
 	}
 
 	private void updateUI( DisplayMessage message, int rowId ) {

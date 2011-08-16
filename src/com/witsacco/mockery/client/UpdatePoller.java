@@ -12,7 +12,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class MessagePoller extends Timer implements HasHandlers {
+public class UpdatePoller extends Timer implements HasHandlers {
 
 	// Poll for new messages every three seconds
 	private static final int POLL_INTERVAL = 3000;
@@ -21,13 +21,13 @@ public class MessagePoller extends Timer implements HasHandlers {
 
 	private Date lastChecked;
 
-	private GetNewMessagesServiceAsync getNewMessagesSvc;
+	private GetUpdatesServiceAsync getNewMessagesSvc;
 	private HandlerManager handlerManager;
 
-	public MessagePoller( int roomId ) {
+	public UpdatePoller( int roomId ) {
 		this.roomId = roomId;
 
-		getNewMessagesSvc = GWT.create( GetNewMessagesService.class );
+		getNewMessagesSvc = GWT.create( GetUpdatesService.class );
 		handlerManager = new HandlerManager( this );
 
 		// Initialize the last time we checked for new messages to now
@@ -62,7 +62,7 @@ public class MessagePoller extends Timer implements HasHandlers {
 		};
 
 		// Make the call to the stock price service.
-		getNewMessagesSvc.getNewMessages( roomId, lastChecked, callback );
+		getNewMessagesSvc.getUpdates( roomId, lastChecked, callback );
 	}
 
 	@Override

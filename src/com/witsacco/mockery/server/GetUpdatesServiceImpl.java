@@ -17,14 +17,17 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.DisplayMessage;
-import com.witsacco.mockery.client.GetNewMessagesService;
+import com.witsacco.mockery.client.GetUpdatesService;
 
-public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements GetNewMessagesService {
+public class GetUpdatesServiceImpl extends RemoteServiceServlet implements GetUpdatesService {
 
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * Returns messages created or updated since cutoff time.
+	 */
 	@Override
-	public ArrayList< DisplayMessage > getNewMessages( int roomId, Date cutoff ) {
+	public ArrayList< DisplayMessage > getUpdates( int roomId, Date cutoff ) {
 
 		// Instantiate a handle to the data store
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -38,10 +41,10 @@ public class GetNewMessagesServiceImpl extends RemoteServiceServlet implements G
 		Query query = new Query( "Message", roomKey );
 
 		// Add a filter for messages greater than the cutoff
-		query.addFilter( "createTime", Query.FilterOperator.GREATER_THAN, cutoff );
+		query.addFilter( "updateTime", Query.FilterOperator.GREATER_THAN, cutoff );
 
 		// Sort the new messages in descending order by date
-		query.addSort( "createTime", Query.SortDirection.ASCENDING );
+		query.addSort( "updateTime", Query.SortDirection.ASCENDING );
 
 		// Retrieve the new messages from the query (limit to 10 for now)
 		List< Entity > messages = datastore.prepare( query ).asList( withLimit( 10 ) );
