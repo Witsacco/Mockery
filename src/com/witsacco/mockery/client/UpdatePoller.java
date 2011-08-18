@@ -42,13 +42,15 @@ public class UpdatePoller extends Timer implements HasHandlers {
 	public void run() {
 
 		// Set up the callback object.
-		AsyncCallback< ArrayList< DisplayMessage > > callback = new AsyncCallback< ArrayList< DisplayMessage > >() {
+		AsyncCallback< UpdatePackage > callback = new AsyncCallback< UpdatePackage >() {
 			public void onFailure( Throwable caught ) {
 				Window.alert( "Something went wrong!" );
 			}
 
 			// Handler for successful retrieval of new messages
-			public void onSuccess( ArrayList< DisplayMessage > res ) {
+			public void onSuccess( UpdatePackage updates ) {
+
+				ArrayList< DisplayMessage > res = updates.getMessages();
 
 				// If we found new messages, fire and event for listeners to
 				// process

@@ -1,6 +1,9 @@
 package com.witsacco.mockery.server;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+
 import java.util.Date;
+import java.util.List;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -8,6 +11,10 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.MessageScore;
 import com.witsacco.mockery.client.MessageScoreService;
@@ -19,19 +26,23 @@ public class MessageScoreServiceImpl extends RemoteServiceServlet implements Mes
 	private static final MessageJudge JUDGE = MessageJudge.getInstance();
 
 	/*
-	 * Scores a message given its id and the id of the room it belongs to.
-	 * Returns null if an error code, otherwise the score object.
+	 * Scores a message given its id and the id of the room it belongs to. Returns null if an error code, otherwise
+	 * the score object.
 	 */
 	@Override
 	public MessageScore scoreMessage( int roomId, long messageId ) {
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+
 		// Get a handle for the datastore
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		Key roomKey = KeyFactory.createKey( "Room", roomId );
 
 		// Look up the message to be scored
 		Entity message;
 		try {
 			// Get the given message in the given room
-			Key roomKey = KeyFactory.createKey( "Room", roomId );
 			message = datastore.get( KeyFactory.createKey( roomKey, "Message", messageId ) );
 		}
 		catch ( EntityNotFoundException e ) {
@@ -47,6 +58,28 @@ public class MessageScoreServiceImpl extends RemoteServiceServlet implements Mes
 		message.setProperty( "updateTime", new Date() );
 
 		datastore.put( message );
+
+		// Update the author's cumulative score
+		Query query = new Query( "MockeryUser", roomKey );
+		query.addFilter( "user", Query.FilterOperator.EQUAL, user );
+		List< Entity > users = datastore.prepare( query ).asList( withLimit( 1 ) );
+
+		Entity userEntity;
+
+		if ( users.size() > 0 ) {
+			// This user exists, log them in
+			userEntity = users.get( 0 );
+
+			Long currentScore = ( Long ) userEntity.getProperty( "cumulativeScore" );
+			currentScore += result.getScore();
+
+			userEntity.setProperty( "cumulativeScore", currentScore );
+
+			datastore.put( userEntity );
+		}
+		else {
+			// TODO Throw an error here? Invalid user?
+		}
 
 		return result;
 

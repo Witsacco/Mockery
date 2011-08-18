@@ -14,7 +14,7 @@ public class DisplayUser implements Serializable {
 	private String handle;
 
 	// The user's cumulative score
-	private int cumulativeScore;
+	private Long cumulativeScore;
 
 	// Whether or not this user is logged in
 	private boolean loggedIn;
@@ -28,7 +28,7 @@ public class DisplayUser implements Serializable {
 	 * @param cumulativeScore
 	 * @param loggedIn
 	 */
-	public DisplayUser( String handle, int cumulativeScore, boolean loggedIn ) {
+	public DisplayUser( String handle, Long cumulativeScore, boolean loggedIn ) {
 		this.handle = handle;
 		this.cumulativeScore = cumulativeScore;
 		this.loggedIn = loggedIn;
@@ -52,7 +52,7 @@ public class DisplayUser implements Serializable {
 	/**
 	 * @return the cumulativeScore
 	 */
-	public int getCumulativeScore() {
+	public Long getCumulativeScore() {
 		return cumulativeScore;
 	}
 
@@ -60,7 +60,7 @@ public class DisplayUser implements Serializable {
 	 * @param cumulativeScore
 	 *            the cumulativeScore to set
 	 */
-	public void setCumulativeScore( int cumulativeScore ) {
+	public void setCumulativeScore( Long cumulativeScore ) {
 		this.cumulativeScore = cumulativeScore;
 	}
 

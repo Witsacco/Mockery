@@ -21,6 +21,8 @@ public class JoinServiceImpl extends RemoteServiceServlet implements JoinService
 
 	private static final long serialVersionUID = 1L;
 
+	// TODO Clean this class up.
+
 	/*
 	 * @roomId The room to be joined
 	 * 
@@ -70,14 +72,14 @@ public class JoinServiceImpl extends RemoteServiceServlet implements JoinService
 			userEntity = new Entity( "MockeryUser", roomKey );
 			userEntity.setProperty( "user", user );
 			userEntity.setProperty( "loggedIn", true );
-			userEntity.setProperty( "cumulativeScore", 0 );
+			userEntity.setProperty( "cumulativeScore", new Long( 0 ) );
 			userEntity.setProperty( "handle", handle ); // TODO Should this be persisted?
 
 			// Persist this new user
 			datastore.put( userEntity );
 		}
 
-		return new DisplayUser( handle, ( Integer ) userEntity.getProperty( "cumulativeScore" ), true );
+		return new DisplayUser( handle, ( Long ) userEntity.getProperty( "cumulativeScore" ), true );
 	}
 
 }

@@ -31,11 +31,11 @@ public class Scoreboard {
 		scoreTable.setText( 0, 1, "Score" );
 		scoreTable.getRowFormatter().addStyleName( 0, "score-header" );
 
-		addUser( "Rich", 10 );
-		addUser( "Ryan", 5 );
-		addUser( "Chris", -1 );
-		addUser( "Dom", -10 );
-		
+		addUser( "Rich", new Long( 10 ) );
+		addUser( "Ryan", new Long( 5 ) );
+		addUser( "Chris", new Long( -1 ) );
+		addUser( "Dom", new Long( -10 ) );
+
 		mainPanel.add( scoreTable );
 	}
 
@@ -43,20 +43,20 @@ public class Scoreboard {
 		return mainPanel;
 	}
 
-	 void addUser( String userName, int score ) {
-		 final int rowCount = scoreTable.getRowCount();
-		 scoreTable.setText( rowCount, 0, userName );
-		 scoreTable.setText( rowCount, 1, Integer.toString( score ) );
-		 
+	void addUser( String userName, Long score ) {
+		final int rowCount = scoreTable.getRowCount();
+		scoreTable.setText( rowCount, 0, userName );
+		scoreTable.setText( rowCount, 1, score.toString() );
+
 		// Apply cell-level formatting
 		scoreTable.getCellFormatter().addStyleName( rowCount, 0, "user-col" );
 		scoreTable.getCellFormatter().addStyleName( rowCount, 1, "score-col" );
 
 		// Apply row-level formatting
-		scoreTable.getRowFormatter().addStyleName( rowCount, (rowCount % 2 == 0 ? "row-even" : "row-odd" ) );
-	 }
+		scoreTable.getRowFormatter().addStyleName( rowCount, ( rowCount % 2 == 0 ? "row-even" : "row-odd" ) );
+	}
 
-	 //
+	//
 	// ArrayList< MockeryUser > getStandings() {
 	//
 	// }
