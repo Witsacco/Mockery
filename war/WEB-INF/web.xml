@@ -37,6 +37,16 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>joinService</servlet-name>
+		<servlet-class>com.witsacco.mockery.server.JoinServiceImpl</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>joinService</servlet-name>
+		<url-pattern>/mockery/join</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>com.witsacco.mockery.server.LoginServiceImpl</servlet-class>
 	</servlet>

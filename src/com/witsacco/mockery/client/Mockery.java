@@ -3,16 +3,22 @@ package com.witsacco.mockery.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -20,17 +26,22 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessagesAvailableEventHandler {
 
-	//
-	// An object that represents the current user, logged in or not
-	private LoginInfo user = null;
+	// An object that represents the current log in info/status
+	private LoginInfo loginInfo = null;
 
-	// For right now, we only have one room
-	private final int ROOM_ID = 1;
+	// The user's information (handle, score, etc.)
+	private DisplayUser user = null;
 
-	Scoreboard scoreboard;
-	Room room;
-	InputField inputField;
-	UpdatePoller poller;
+	// The room that the user is in
+	private int activeRoom;
+
+	// Our update poller
+	private UpdatePoller poller;
+
+	// UI Elements
+	private Scoreboard scoreboard;
+	private Room room;
+	private InputField inputField;
 
 	private MessagePostedServiceAsync messagePostedSvc;
 
@@ -43,7 +54,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		LoginServiceAsync loginService = GWT.create( LoginService.class );
 
 		// Attempt to log the user in
-		loginService.login( GWT.getHostPageBaseURL(), ROOM_ID, new LoginHandler() );
+		loginService.login( GWT.getHostPageBaseURL(), new LoginHandler() );
 	}
 
 	private void showLoginScreen() {
@@ -60,7 +71,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		// Login button and panel
 		Anchor loginButton = new Anchor( "Sign in with Google" );
 		loginButton.addStyleName( "login-button" );
-		loginButton.setHref( user.getLoginUrl() );
+		loginButton.setHref( loginInfo.getLoginUrl() );
 		FlowPanel loginButtonPanel = new FlowPanel();
 		loginButtonPanel.add( loginButton );
 
@@ -75,9 +86,48 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		rp.add( loginPanel );
 	}
 
+	private void showJoinScreen() {
+
+		// Make a panel to contain the controls
+		VerticalPanel joinPanel = new VerticalPanel();
+		joinPanel.setWidth( "300px" );
+
+		// TODO Unneeded obviously, remove this
+		final Label disclaimer = new Label( "This obviously needs style, Drywit." );
+
+		final ListBox roomSelector = new ListBox();
+		final TextBox handleField = new TextBox();
+
+		// TODO Make this more modular (room names & ids)
+		roomSelector.addItem( "Main Room", "1" );
+
+		Button joinButton = new Button( "Join the room", new ClickHandler() {
+			public void onClick( ClickEvent click ) {
+				// Set the session's active room
+				activeRoom = new Integer( roomSelector.getValue( roomSelector.getSelectedIndex() ) );
+
+				// Grab the user's requested handle
+				String handle = handleField.getText();
+
+				JoinServiceAsync joinService = GWT.create( JoinService.class );
+
+				// Register this user
+				joinService.join( activeRoom, handle, new JoinHandler() );
+			}
+		} );
+
+		joinPanel.add( disclaimer );
+		joinPanel.add( roomSelector );
+		joinPanel.add( handleField );
+		joinPanel.add( joinButton );
+
+		RootLayoutPanel rp = RootLayoutPanel.get();
+		rp.add( joinPanel );
+
+	}
+
 	/**
-	 * Sets up listeners for new messages posted by the user or new messages
-	 * posted by other users
+	 * Sets up listeners for new messages posted by the user or new messages posted by other users
 	 */
 	private void initializeHandlers() {
 
@@ -106,7 +156,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		// Create a logout link
 		Anchor logoutButton = new Anchor( "Sign out" );
 		logoutButton.addStyleDependentName( "logout-button" );
-		logoutButton.setHref( user.getLogoutUrl() );
+		logoutButton.setHref( loginInfo.getLogoutUrl() );
 
 		// Create the global header panel
 		HorizontalPanel header = new HorizontalPanel();
@@ -171,7 +221,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 				// Score the new message
 				// TODO Clean this up!
 				MessageScoreServiceAsync scoringSvc = GWT.create( MessageScoreService.class );
-				scoringSvc.scoreMessage( ROOM_ID, result.getMessageId(), new AsyncCallback< MessageScore >() {
+				scoringSvc.scoreMessage( activeRoom, result.getMessageId(), new AsyncCallback< MessageScore >() {
 					public void onFailure( Throwable caught ) {
 						Window.alert( "Something went wrong in the scoring service" );
 					}
@@ -179,7 +229,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 					public void onSuccess( MessageScore score ) {
 						result.setScore( score.getScore() );
 						result.setScoreReason( score.getExplanation() );
-						
+
 						room.handleIncomingMessage( result );
 					}
 				} );
@@ -190,7 +240,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		};
 
 		// Call the MessagePostedService
-		messagePostedSvc.postMessage( ROOM_ID, event.getMessage(), callback );
+		messagePostedSvc.postMessage( activeRoom, event.getMessage(), callback );
 	}
 
 	@Override
@@ -201,8 +251,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	}
 
 	/**
-	 * Private inner class which implements the callback for logging in. On
-	 * successful login, this will initialize Mockery for use
+	 * Private inner class which implements the callback for logging in. On successful login, this will prompt the
+	 * user for a handle.
 	 */
 	private class LoginHandler implements AsyncCallback< LoginInfo > {
 
@@ -212,32 +262,52 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		}
 
 		public void onSuccess( LoginInfo result ) {
-			user = result;
+			loginInfo = result;
 
-			if ( user.isLoggedIn() ) {
-
-				// Create UI elements
-				scoreboard = new Scoreboard();
-				room = new Room();
-				inputField = new InputField();
-				poller = new UpdatePoller( ROOM_ID );
-
-				// Add the user to the scoreboard
-				// TODO Fix this
-				scoreboard.addUser( user.getNickname(), 0 );
-
-				// Set up user interface
-				initializeUI();
-
-				// Set up listeners for events
-				initializeHandlers();
-
-				// Start polling for new messages
-				poller.startPolling();
+			if ( loginInfo.isLoggedIn() ) {
+				showJoinScreen();
 			}
 			else {
 				showLoginScreen();
 			}
 		}
 	}
+
+	/**
+	 * Private inner class which implements the callback for prompting a logged-in user for a handle. Once the user
+	 * sets a handle, this will initialize Mockery for use.
+	 */
+	private class JoinHandler implements AsyncCallback< DisplayUser > {
+
+		public void onFailure( Throwable error ) {
+			// TODO Handle an error on join more elegantly
+			Window.alert( error.getMessage() );
+		}
+
+		public void onSuccess( DisplayUser dUser ) {
+
+			// Set this session's user
+			user = dUser;
+
+			// Create UI elements
+			scoreboard = new Scoreboard();
+			room = new Room();
+			inputField = new InputField();
+			poller = new UpdatePoller( activeRoom );
+
+			// Add the user to the scoreboard
+			scoreboard.addUser( user.getHandle(), user.getCumulativeScore() );
+
+			// Set up user interface
+			initializeUI();
+
+			// Set up listeners for events
+			initializeHandlers();
+
+			// Start polling for new messages
+			poller.startPolling();
+
+		}
+	}
+
 }
