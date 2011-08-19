@@ -1,8 +1,9 @@
-package com.witsacco.mockery.client;
+package com.witsacco.mockery.events;
 
 import java.util.ArrayList;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.witsacco.mockery.client.DisplayMessage;
 
 public class NewMessagesAvailableEvent extends GwtEvent< NewMessagesAvailableEventHandler > {
 

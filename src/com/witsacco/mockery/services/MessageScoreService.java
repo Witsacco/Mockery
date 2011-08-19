@@ -1,7 +1,8 @@
-package com.witsacco.mockery.client;
+package com.witsacco.mockery.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.witsacco.mockery.client.MessageScore;
 
 @RemoteServiceRelativePath( "scoreMessage" )
 public interface MessageScoreService extends RemoteService {

@@ -17,7 +17,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.MessageScore;
-import com.witsacco.mockery.client.MessageScoreService;
+import com.witsacco.mockery.services.MessageScoreService;
 
 public class MessageScoreServiceImpl extends RemoteServiceServlet implements MessageScoreService {
 

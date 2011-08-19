@@ -15,7 +15,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.DisplayUser;
-import com.witsacco.mockery.client.JoinService;
+import com.witsacco.mockery.services.JoinService;
 
 public class JoinServiceImpl extends RemoteServiceServlet implements JoinService {
 

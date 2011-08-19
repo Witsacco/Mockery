@@ -1,6 +1,7 @@
-package com.witsacco.mockery.client;
+package com.witsacco.mockery.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.witsacco.mockery.client.MessageScore;
 
 public interface MessageScoreServiceAsync {
 

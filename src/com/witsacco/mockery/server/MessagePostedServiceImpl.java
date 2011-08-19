@@ -12,7 +12,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.DisplayMessage;
-import com.witsacco.mockery.client.MessagePostedService;
+import com.witsacco.mockery.services.MessagePostedService;
 
 public class MessagePostedServiceImpl extends RemoteServiceServlet implements MessagePostedService {
 

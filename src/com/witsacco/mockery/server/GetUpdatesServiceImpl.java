@@ -18,8 +18,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.witsacco.mockery.client.DisplayMessage;
 import com.witsacco.mockery.client.DisplayUser;
-import com.witsacco.mockery.client.GetUpdatesService;
 import com.witsacco.mockery.client.UpdatePackage;
+import com.witsacco.mockery.services.GetUpdatesService;
 
 public class GetUpdatesServiceImpl extends RemoteServiceServlet implements GetUpdatesService {
 

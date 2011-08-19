@@ -20,6 +20,18 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.witsacco.mockery.events.MessagePostedEvent;
+import com.witsacco.mockery.events.MessagePostedEventHandler;
+import com.witsacco.mockery.events.NewMessagesAvailableEvent;
+import com.witsacco.mockery.events.NewMessagesAvailableEventHandler;
+import com.witsacco.mockery.services.JoinService;
+import com.witsacco.mockery.services.JoinServiceAsync;
+import com.witsacco.mockery.services.LoginService;
+import com.witsacco.mockery.services.LoginServiceAsync;
+import com.witsacco.mockery.services.MessagePostedService;
+import com.witsacco.mockery.services.MessagePostedServiceAsync;
+import com.witsacco.mockery.services.MessageScoreService;
+import com.witsacco.mockery.services.MessageScoreServiceAsync;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

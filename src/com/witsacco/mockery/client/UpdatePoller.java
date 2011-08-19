@@ -11,6 +11,10 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.witsacco.mockery.events.NewMessagesAvailableEvent;
+import com.witsacco.mockery.events.NewMessagesAvailableEventHandler;
+import com.witsacco.mockery.services.GetUpdatesService;
+import com.witsacco.mockery.services.GetUpdatesServiceAsync;
 
 public class UpdatePoller extends Timer implements HasHandlers {
 

@@ -1,8 +1,9 @@
-package com.witsacco.mockery.client;
+package com.witsacco.mockery.services;
 
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.witsacco.mockery.client.UpdatePackage;
 
 public interface GetUpdatesServiceAsync {
 

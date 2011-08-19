@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+import com.witsacco.mockery.events.MessagePostedEvent;
+import com.witsacco.mockery.events.MessagePostedEventHandler;
 
 public class InputField implements HasHandlers {
 

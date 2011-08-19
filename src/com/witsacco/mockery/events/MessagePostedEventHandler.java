@@ -1,4 +1,4 @@
-package com.witsacco.mockery.client;
+package com.witsacco.mockery.events;
 
 import com.google.gwt.event.shared.EventHandler;
 
