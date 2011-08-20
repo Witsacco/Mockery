@@ -2,6 +2,7 @@
 <module rename-to='mockery'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.resources.Resources" />
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
@@ -21,5 +22,6 @@
   <source path='shared'/>
   <source path='events'/>
   <source path='services'/>
+  <source path='resources'/>
 
 </module>

@@ -24,6 +24,9 @@ import com.witsacco.mockery.events.MessagePostedEvent;
 import com.witsacco.mockery.events.MessagePostedEventHandler;
 import com.witsacco.mockery.events.NewMessagesAvailableEvent;
 import com.witsacco.mockery.events.NewMessagesAvailableEventHandler;
+import com.witsacco.mockery.resources.LoginCSS;
+import com.witsacco.mockery.resources.MockeryCSS;
+import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.services.JoinService;
 import com.witsacco.mockery.services.JoinServiceAsync;
 import com.witsacco.mockery.services.LoginService;
@@ -57,6 +60,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	private MessagePostedServiceAsync messagePostedSvc;
 
+	private MockeryCSS css = MockeryResources.INSTANCE.mockeryCss();
+	private LoginCSS loginCss = MockeryResources.INSTANCE.loginCss();
+
 	/**
 	 * This is the entry point method.
 	 */
@@ -71,9 +77,11 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 	private void showLoginScreen() {
 
+		loginCss.ensureInjected();
+		
 		// Panel for the login screen
 		FlowPanel loginPanel = new FlowPanel();
-		loginPanel.addStyleName( "login-panel" );
+		loginPanel.addStyleName( loginCss.loginPanel() );
 
 		// Labels for the login screen
 		Label loginHeader = new Label( "Welcome to Mockery, a-hole." );
@@ -139,7 +147,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	}
 
 	/**
-	 * Sets up listeners for new messages posted by the user or new messages posted by other users
+	 * Sets up listeners for new messages posted by the user or new messages
+	 * posted by other users
 	 */
 	private void initializeHandlers() {
 
@@ -154,12 +163,13 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// Create a panel to span the page and align its contents in the center
 		HorizontalPanel pagePanel = new HorizontalPanel();
-		pagePanel.addStyleName( "page-panel" );
+		pagePanel.addStyleName( css.pagePanel() );
+		pagePanel.addStyleName( css.sheep() );
 		pagePanel.setHorizontalAlignment( HorizontalPanel.ALIGN_CENTER );
 
 		// Set up the main container to hold the scoreboard, room and entry
 		DockLayoutPanel mainDock = new DockLayoutPanel( Unit.PCT );
-		mainDock.addStyleName( "main-dock" );
+		mainDock.addStyleName( css.mainDock() );
 
 		// Create a header
 		Label mainTitleLabel = new Label( "Mockery" );
@@ -172,7 +182,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// Create the global header panel
 		HorizontalPanel header = new HorizontalPanel();
-		header.addStyleName( "header" );
+		header.addStyleName( css.header() );
 		header.setSize( "100%", "100%" );
 
 		// Add main title label left aligned
@@ -263,8 +273,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	}
 
 	/**
-	 * Private inner class which implements the callback for logging in. On successful login, this will prompt the
-	 * user for a handle.
+	 * Private inner class which implements the callback for logging in. On
+	 * successful login, this will prompt the user for a handle.
 	 */
 	private class LoginHandler implements AsyncCallback< LoginInfo > {
 
@@ -278,16 +288,16 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 			if ( loginInfo.isLoggedIn() ) {
 				showJoinScreen();
-			}
-			else {
+			} else {
 				showLoginScreen();
 			}
 		}
 	}
 
 	/**
-	 * Private inner class which implements the callback for prompting a logged-in user for a handle. Once the user
-	 * sets a handle, this will initialize Mockery for use.
+	 * Private inner class which implements the callback for prompting a
+	 * logged-in user for a handle. Once the user sets a handle, this will
+	 * initialize Mockery for use.
 	 */
 	private class JoinHandler implements AsyncCallback< DisplayUser > {
 
@@ -300,6 +310,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 			// Set this session's user
 			user = dUser;
+
+			// Add the appropriate Mockery CSS
+			css.ensureInjected();
 
 			// Create UI elements
 			scoreboard = new Scoreboard();

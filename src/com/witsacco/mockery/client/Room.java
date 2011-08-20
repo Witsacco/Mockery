@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.witsacco.mockery.resources.MockeryResources;
+import com.witsacco.mockery.resources.RoomCSS;
 
 public class Room {
 
@@ -12,6 +14,8 @@ public class Room {
 
 	private ScrollPanel mainPanel;
 	private FlexTable messageTable;
+
+	private RoomCSS css = MockeryResources.INSTANCE.roomCss();
 
 	public Room() {
 		messages = new ArrayList< DisplayMessage >();
@@ -21,16 +25,17 @@ public class Room {
 	}
 
 	private void initializeUI() {
+		
+		// Inject CSS
+		css.ensureInjected();
+		
 		mainPanel = new ScrollPanel();
-		mainPanel.addStyleName( "room-panel" );
+		mainPanel.addStyleName( css.roomPanel() );
 
 		messageTable = new FlexTable();
-		messageTable.addStyleName( "message-table" );
+		messageTable.addStyleName( css.messageTable() );
 
 		mainPanel.add( messageTable );
-
-		// addMessage( "Rich", "The Mets rule" );
-		// addMessage( "Dom", "The Mets suck" );
 	}
 
 	public Widget getPanel() {
@@ -66,23 +71,23 @@ public class Room {
 		messageTable.setText( rowId, 1, message.getBody() );
 
 		// Apply cell-level formatting
-		messageTable.getCellFormatter().addStyleName( rowId, 0, "sender-col" );
-		messageTable.getCellFormatter().addStyleName( rowId, 1, "content-col" );
+		messageTable.getCellFormatter().addStyleName( rowId, 0, css.senderCol() );
+		messageTable.getCellFormatter().addStyleName( rowId, 1, css.contentCol() );
 
 		if ( message.getScore() == null ) {
 			// This message doesn't have a score, show a spinner
 			messageTable.setText( rowId, 2, "" );
-			messageTable.getCellFormatter().setStyleName( rowId, 2, "spinner" );
+			messageTable.getCellFormatter().setStyleName( rowId, 2, css.spinner() );
 		}
 		else {
 			// This message has been scored, update it appropriately
 			messageTable.setText( rowId, 2, message.getScore() );
-			messageTable.getCellFormatter().setStyleName( rowId, 2, "score-col" );
+			messageTable.getCellFormatter().setStyleName( rowId, 2, css.scoreCol() );
 		}
 
 		// TODO Add a timestamp to this view
 
 		// Apply row-level formatting
-		messageTable.getRowFormatter().addStyleName( rowId, ( rowId % 2 == 0 ? "row-even" : "row-odd" ) );
+		messageTable.getRowFormatter().addStyleName( rowId, ( rowId % 2 == 0 ? css.rowEven() : css.rowOdd() ) );
 	}
 }

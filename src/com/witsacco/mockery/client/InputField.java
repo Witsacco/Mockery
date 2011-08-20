@@ -14,6 +14,8 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.witsacco.mockery.events.MessagePostedEvent;
 import com.witsacco.mockery.events.MessagePostedEventHandler;
+import com.witsacco.mockery.resources.InputFieldCSS;
+import com.witsacco.mockery.resources.MockeryResources;
 
 public class InputField implements HasHandlers {
 
@@ -25,6 +27,8 @@ public class InputField implements HasHandlers {
 	private LayoutPanel layout;
 	private TextArea inputArea;
 
+	private InputFieldCSS css = MockeryResources.INSTANCE.inputFieldCss();
+	
 	public InputField() {
 
 		// Initialize GWT event handler manager
@@ -39,20 +43,22 @@ public class InputField implements HasHandlers {
 	 */
 	private void initializeUI() {
 
+		css.ensureInjected();
+		
 		// Set up the main panel to hold the InputField UI elements
 		mainPanel = new FlowPanel();
-		mainPanel.addStyleName( "input-panel" );
+		mainPanel.addStyleName( css.inputPanel() );
 
 		// Set up input area
 		inputArea = new TextArea();
-		inputArea.addStyleName( "input-textarea" );
+		inputArea.addStyleName( css.intputText() );
 		inputArea.setCharacterWidth( 80 );
 		inputArea.setVisibleLines( 4 );
 		initializeTextAreaListener();
 
 		// Create layout for input area
 		layout = new LayoutPanel();
-		layout.addStyleName( "layout-panel" );
+		layout.addStyleName( css.layoutPanel() );
 
 		// Add the TextArea to the layout manager
 		layout.add( inputArea );

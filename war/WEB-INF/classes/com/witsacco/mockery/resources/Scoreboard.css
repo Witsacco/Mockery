@@ -1,0 +1,36 @@
+@CHARSET "ISO-8859-1";
+
+.scoreboard-panel {
+	background-color: #F5F7FF;
+	border-left: 1px solid #666;
+}
+
+.scoreboard-panel .score-table {
+	width: 95%;
+	margin-top: 5px;
+	border-collapse: collapse;
+}
+
+.scoreboard-panel .score-table .score-header {
+	background-color: blue;
+	font-weight: bold;
+	color: white;
+}
+
+.scoreboard-panel .score-table .row-even {
+	background-color:  #C2D1FF;
+}
+
+.scoreboard-panel .score-table .row-odd {
+	background-color: #F5F7FF;
+}
+
+.scoreboard-panel .score-table .user-col {
+	font-weight: bold;
+	padding: 5px;
+}
+
+.scoreboard-panel .score-table .score-col {
+	font-style: italic;
+	padding: 5px;
+}
