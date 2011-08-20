@@ -1,5 +1,6 @@
 *.class
 .gwt/.gwt-log
 war/mockery
-war/WEB-INF/deploy
 war/WEB-INF/appengine-generated
+war/WEB-INT/classes
+war/WEB-INF/deploy

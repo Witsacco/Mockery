@@ -28,4 +28,10 @@ public interface MockeryResources extends ClientBundle {
 
 	@Source( "spinner.gif" )
 	ImageResource spinner();
+
+	@Source( "bullet_online.png" )
+	ImageResource bullet_online();
+
+	@Source( "bullet_offline.png" )
+	ImageResource bullet_offline();
 }

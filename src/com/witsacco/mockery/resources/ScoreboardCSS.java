@@ -24,4 +24,11 @@ public interface ScoreboardCSS extends CssResource {
 
 	@ClassName( "score-col" )
 	String scoreCol();
+
+	@ClassName( "online" )
+	String isOnline();
+
+	@ClassName( "offline" )
+	String isOffline();
+	
 }

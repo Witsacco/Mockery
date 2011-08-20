@@ -1,11 +1,17 @@
 package com.witsacco.mockery.client;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -14,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -24,11 +31,17 @@ import com.witsacco.mockery.events.MessagePostedEvent;
 import com.witsacco.mockery.events.MessagePostedEventHandler;
 import com.witsacco.mockery.events.NewMessagesAvailableEvent;
 import com.witsacco.mockery.events.NewMessagesAvailableEventHandler;
+import com.witsacco.mockery.events.ScoreboardUpdateAvailableEvent;
+import com.witsacco.mockery.events.ScoreboardUpdateAvailableEventHandler;
 import com.witsacco.mockery.resources.LoginCSS;
 import com.witsacco.mockery.resources.MockeryCSS;
 import com.witsacco.mockery.resources.MockeryResources;
+import com.witsacco.mockery.services.GetUpdatesService;
+import com.witsacco.mockery.services.GetUpdatesServiceAsync;
 import com.witsacco.mockery.services.JoinService;
 import com.witsacco.mockery.services.JoinServiceAsync;
+import com.witsacco.mockery.services.LeaveService;
+import com.witsacco.mockery.services.LeaveServiceAsync;
 import com.witsacco.mockery.services.LoginService;
 import com.witsacco.mockery.services.LoginServiceAsync;
 import com.witsacco.mockery.services.MessagePostedService;
@@ -39,13 +52,11 @@ import com.witsacco.mockery.services.MessageScoreServiceAsync;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessagesAvailableEventHandler {
+public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessagesAvailableEventHandler,
+		ScoreboardUpdateAvailableEventHandler, Window.ClosingHandler {
 
 	// An object that represents the current log in info/status
 	private LoginInfo loginInfo = null;
-
-	// The user's information (handle, score, etc.)
-	private DisplayUser user = null;
 
 	// The room that the user is in
 	private int activeRoom;
@@ -78,7 +89,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	private void showLoginScreen() {
 
 		loginCss.ensureInjected();
-		
+
 		// Panel for the login screen
 		FlowPanel loginPanel = new FlowPanel();
 		loginPanel.addStyleName( loginCss.loginPanel() );
@@ -120,7 +131,35 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// TODO Make this more modular (room names & ids)
 		roomSelector.addItem( "Main Room", "1" );
+		
+		// TODO Duplicate code below!
+		
+		handleField.addKeyPressHandler( new KeyPressHandler() {
 
+			@Override
+			public void onKeyPress( KeyPressEvent event ) {
+				
+				// Leave if we didn't see the enter key
+				if ( event.getNativeEvent().getKeyCode() != KeyCodes.KEY_ENTER ) {
+					return;
+				}
+
+				// Set the session's active room
+				activeRoom = new Integer( roomSelector.getValue( roomSelector.getSelectedIndex() ) );
+
+				// Grab the user's requested handle
+				String handle = handleField.getText();
+
+				JoinServiceAsync joinService = GWT.create( JoinService.class );
+
+				// Register this user
+				joinService.join( activeRoom, handle, new JoinHandler() );
+
+				// Prevent enter character from being typed
+				event.preventDefault();
+			}
+		} );
+		
 		Button joinButton = new Button( "Join the room", new ClickHandler() {
 			public void onClick( ClickEvent click ) {
 				// Set the session's active room
@@ -143,12 +182,33 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add( joinPanel );
+	}
 
+	private void showLoadingScreen() {
+
+		// Clear the panel
+		RootLayoutPanel.get().clear();
+
+		final Image spinner = new Image( MockeryResources.INSTANCE.spinner() );
+		final Label joinLabel = new Label( "Joining room..." );
+
+		// Make a panel to contain the spinner and label
+		VerticalPanel spinnerPanel = new VerticalPanel();
+		spinnerPanel.addStyleName( css.spinnerPanel() );
+
+		spinnerPanel.add( spinner );
+		spinnerPanel.add( joinLabel );
+
+		RootLayoutPanel rp = RootLayoutPanel.get();
+		rp.add( spinnerPanel );
+
+		// Call the updates service
+		GetUpdatesServiceAsync initRoomService = GWT.create( GetUpdatesService.class );
+		initRoomService.getUpdates( activeRoom, new Date(), new InitialUpdateHandler() );
 	}
 
 	/**
-	 * Sets up listeners for new messages posted by the user or new messages
-	 * posted by other users
+	 * Sets up listeners for new messages posted by the user or new messages posted by other users
 	 */
 	private void initializeHandlers() {
 
@@ -157,6 +217,13 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// Add listener on poller for incoming messages
 		poller.addNewMessagesAvailableEventHandler( this );
+
+		// Add listener on poller for standings updates
+		poller.addScoreboardUpdateAvailableEventHandler( this );
+		
+		// Add listener for the window close event to log the user out
+		Window.addWindowClosingHandler( this );
+
 	}
 
 	private void initializeUI() {
@@ -272,9 +339,22 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		}
 	}
 
+	@Override
+	public void onScoreboardUpdateAvailable( ScoreboardUpdateAvailableEvent event ) {
+		// Update the scoreboard with the current standings
+		scoreboard.update( event.getCurrentStandings() );
+	}
+
+	@Override
+	public void onWindowClosing( ClosingEvent event ) {
+		// The user is leaving, log them out
+		LeaveServiceAsync leaveService = GWT.create( LeaveService.class );
+		leaveService.leave( activeRoom, new LeaveHandler() );
+	}
+
 	/**
-	 * Private inner class which implements the callback for logging in. On
-	 * successful login, this will prompt the user for a handle.
+	 * Private inner class which implements the callback for logging in. On successful login, this will prompt the
+	 * user for a handle.
 	 */
 	private class LoginHandler implements AsyncCallback< LoginInfo > {
 
@@ -288,16 +368,16 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 			if ( loginInfo.isLoggedIn() ) {
 				showJoinScreen();
-			} else {
+			}
+			else {
 				showLoginScreen();
 			}
 		}
 	}
 
 	/**
-	 * Private inner class which implements the callback for prompting a
-	 * logged-in user for a handle. Once the user sets a handle, this will
-	 * initialize Mockery for use.
+	 * Private inner class which implements the callback for prompting a logged-in user for a handle. Once the user
+	 * sets a handle, this will initialize Mockery for use.
 	 */
 	private class JoinHandler implements AsyncCallback< DisplayUser > {
 
@@ -308,9 +388,6 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		public void onSuccess( DisplayUser dUser ) {
 
-			// Set this session's user
-			user = dUser;
-
 			// Add the appropriate Mockery CSS
 			css.ensureInjected();
 
@@ -320,10 +397,31 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 			inputField = new InputField();
 			poller = new UpdatePoller( activeRoom );
 
-			// Add the user to the scoreboard
-			scoreboard.addUser( user.getHandle(), user.getCumulativeScore() );
+			// Show the loading screen
+			showLoadingScreen();
+		}
+	}
 
-			// Set up user interface
+	/**
+	 * Private inner class which implements the callback for getting the first set of room updates. This will make
+	 * sure the room is ready for updates (e.g. has the current standings on the scoreboard.
+	 */
+	private class InitialUpdateHandler implements AsyncCallback< UpdatePackage > {
+
+		public void onFailure( Throwable error ) {
+			// TODO Handle an error on join more elegantly
+			Window.alert( error.getMessage() );
+		}
+
+		public void onSuccess( UpdatePackage initialState ) {
+
+			// Set the scoreboard
+			scoreboard.update( initialState.getCurrentStandings() );
+
+			// Clear the panel
+			RootLayoutPanel.get().clear();
+
+			// Draw the room
 			initializeUI();
 
 			// Set up listeners for events
@@ -331,6 +429,25 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 			// Start polling for new messages
 			poller.startPolling();
+		}
+	}
+
+	/*
+	 * Private inner class which goes back to the join screen after leaving
+	 */
+	private class LeaveHandler implements AsyncCallback< Void > {
+		
+		public void onFailure( Throwable error ) {
+			// TODO Handle an error on join more elegantly
+		}
+
+		public void onSuccess( Void nothing ) {
+			if ( loginInfo.isLoggedIn() ) {
+				showJoinScreen();
+			}
+			else {
+				showLoginScreen();
+			}
 
 		}
 	}

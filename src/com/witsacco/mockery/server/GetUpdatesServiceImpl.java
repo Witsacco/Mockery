@@ -4,6 +4,7 @@ import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -40,12 +41,27 @@ public class GetUpdatesServiceImpl extends RemoteServiceServlet implements GetUp
 
 		Key roomKey = KeyFactory.createKey( "Room", roomId );
 
+		// A user-to-handle lookup set
+		HashMap< User, String > handles = new HashMap< User, String >();
+
+		// The current standings to return
+		ArrayList< DisplayUser > currentStandings = new ArrayList< DisplayUser >();
+
+		Query userQuery = new Query( "MockeryUser", roomKey );
+		userQuery.addSort( "cumulativeScore", Query.SortDirection.DESCENDING );
+		List< Entity > users = datastore.prepare( userQuery ).asList( withLimit( 25 ) );
+
+		for ( Entity activeUser : users ) {
+			// Create the handle lookup record
+			handles.put( ( User ) activeUser.getProperty( "user" ), ( String ) activeUser.getProperty( "handle" ) );
+
+			// Add a DisplayUser to the current standings
+			currentStandings.add( new DisplayUser( ( String ) activeUser.getProperty( "handle" ), ( Long ) activeUser
+					.getProperty( "cumulativeScore" ), ( Boolean ) activeUser.getProperty( "loggedIn" ) ) );
+		}
+
 		Query messageQuery = new Query( "Message", roomKey );
-
-		// Add a filter for messages greater than the cutoff
 		messageQuery.addFilter( "updateTime", Query.FilterOperator.GREATER_THAN, cutoff );
-
-		// Sort the new messages in descending order by date
 		messageQuery.addSort( "updateTime", Query.SortDirection.ASCENDING );
 
 		// Retrieve the new messages from the query (limit to 10 for now)
@@ -66,11 +82,10 @@ public class GetUpdatesServiceImpl extends RemoteServiceServlet implements GetUp
 			if ( !postedBy.equals( user ) ) {
 
 				// Create a new DisplayMessage and add it to the result set
-
 				if ( message.getProperties().containsKey( "score" ) ) {
 					Integer score = new Integer( message.getProperty( "score" ) + "" ); // TODO Cleanup this hack
 					String scoreReason = ( String ) message.getProperty( "scoreReason" );
-					foundMessages.add( new DisplayMessage( id, roomId, messageBody, postedBy.getNickname(), score,
+					foundMessages.add( new DisplayMessage( id, roomId, messageBody, handles.get( postedBy ), score,
 							scoreReason ) );
 				}
 				else {
@@ -79,18 +94,7 @@ public class GetUpdatesServiceImpl extends RemoteServiceServlet implements GetUp
 			}
 		}
 
-		ArrayList< DisplayUser > participants = new ArrayList< DisplayUser >();
-
-		Query userQuery = new Query( "MockeryUser", roomKey );
-		userQuery.addSort( "cumulativeScore", Query.SortDirection.DESCENDING );
-		List< Entity > users = datastore.prepare( userQuery ).asList( withLimit( 25 ) );
-
-		for ( Entity activeUser : users ) {
-			participants.add( new DisplayUser( ( String ) activeUser.getProperty( "handle" ), ( Long ) activeUser
-					.getProperty( "cumulativeScore" ), ( Boolean ) activeUser.getProperty( "loggedIn" ) ) );
-		}
-
 		// Return the set of newly-posted messages
-		return new UpdatePackage( participants, foundMessages );
+		return new UpdatePackage( currentStandings, foundMessages );
 	}
 }

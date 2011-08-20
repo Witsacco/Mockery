@@ -14,40 +14,25 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.witsacco.mockery.client.DisplayUser;
-import com.witsacco.mockery.services.JoinService;
+import com.witsacco.mockery.services.LeaveService;
 
-public class JoinServiceImpl extends RemoteServiceServlet implements JoinService {
+public class LeaveServiceImpl extends RemoteServiceServlet implements LeaveService {
 
 	private static final long serialVersionUID = 1L;
 
-	// TODO Clean this class up.
-
-	/*
-	 * @roomId The room to be joined
-	 * 
-	 * @handle The user's requested handle
-	 */
-	public DisplayUser join( int roomId, String handle ) {
+	public void leave( int roomId ) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 
 		if ( user != null ) {
-			// Add the user to the Standings datastore (or simply update their
-			// loggedIn status) and return them
-			return registerUser( user, roomId, handle );
+			logoutUser( roomId, user );
 		}
 		else {
 			// TODO Throw a better error?
 		}
-
-		return null;
 	}
 
-	/*
-	 * Register this user in this room
-	 */
-	private DisplayUser registerUser( User user, int roomId, String handle ) {
+	private void logoutUser( int roomId, User user ) {
 		// Get a handle for the datastore
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -62,25 +47,13 @@ public class JoinServiceImpl extends RemoteServiceServlet implements JoinService
 		Entity userEntity;
 
 		if ( users.size() > 0 ) {
-			// This user exists, log them in
+			// This user exists, log them out
 			userEntity = users.get( 0 );
-			userEntity.setProperty( "handle", handle ); // Update the user's handle
-			userEntity.setProperty( "loggedIn", true );
+			userEntity.setProperty( "loggedIn", false );
 			datastore.put( userEntity );
 		}
 		else {
-			// This user does not exist yet. Persist a new user Entity.
-			userEntity = new Entity( "MockeryUser", roomKey );
-			userEntity.setProperty( "user", user );
-			userEntity.setProperty( "loggedIn", true );
-			userEntity.setProperty( "cumulativeScore", new Long( 0 ) );
-			userEntity.setProperty( "handle", handle ); // TODO Should this be persisted?
-
-			// Persist this new user
-			datastore.put( userEntity );
+			// TODO Throw an error?
 		}
-
-		return new DisplayUser( handle, ( Long ) userEntity.getProperty( "cumulativeScore" ), true );
 	}
-
 }

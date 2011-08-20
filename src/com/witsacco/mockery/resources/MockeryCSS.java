@@ -13,5 +13,8 @@ public interface MockeryCSS extends CssResource {
 	@ClassName("header")
 	String header();
 
+	@ClassName("spinner-panel")
+	String spinnerPanel();
+
 	String sheep();
 }

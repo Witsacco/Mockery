@@ -1,12 +1,16 @@
 package com.witsacco.mockery.server;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+
 import java.util.Date;
+import java.util.List;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -44,8 +48,14 @@ public class MessagePostedServiceImpl extends RemoteServiceServlet implements Me
 		// Store the message and grab its key
 		Key messageKey = datastore.put( message );
 
+		// Query the database to get the user's handle
+		Query userQuery = new Query( "MockeryUser", roomKey );
+		userQuery.addFilter( "user", Query.FilterOperator.EQUAL, user );
+		List< Entity > users = datastore.prepare( userQuery ).asList( withLimit( 1 ) ); // TODO Error check?
+
 		// Return the message to the client for display
-		return new DisplayMessage( messageKey.getId(), roomId, messageBody, user.getNickname() );
+		return new DisplayMessage( messageKey.getId(), roomId, messageBody, ( String ) users.get( 0 ).getProperty(
+				"handle" ) );
 
 	}
 }

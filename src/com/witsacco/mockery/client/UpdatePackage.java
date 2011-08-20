@@ -2,6 +2,7 @@ package com.witsacco.mockery.client;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 /*
  * Represents an update to a room, with its most current standings and list of messages.
@@ -9,9 +10,15 @@ import java.util.ArrayList;
 public class UpdatePackage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	// The time this UpdatePackage was created
+	private Date timestamp;
+
+	// Current standings as of `created`
 	private ArrayList< DisplayUser > currentStandings;
-	private ArrayList< DisplayMessage > messages;
+
+	// Messages that are new or have been updated as of `created`
+	private ArrayList< DisplayMessage > updatedMessages;
 
 	public UpdatePackage() {
 		// Need this for use on the server side.
@@ -22,9 +29,10 @@ public class UpdatePackage implements Serializable {
 	 * @param messages
 	 */
 	public UpdatePackage( ArrayList< DisplayUser > currentStandings, ArrayList< DisplayMessage > messages ) {
-		super();
+		timestamp = new Date();
+
 		this.currentStandings = currentStandings;
-		this.messages = messages;
+		this.updatedMessages = messages;
 	}
 
 	/**
@@ -45,16 +53,23 @@ public class UpdatePackage implements Serializable {
 	/**
 	 * @return the messages
 	 */
-	public ArrayList< DisplayMessage > getMessages() {
-		return messages;
+	public ArrayList< DisplayMessage > getUpdatedMessages() {
+		return updatedMessages;
 	}
 
 	/**
 	 * @param messages
 	 *            the messages to set
 	 */
-	public void setMessages( ArrayList< DisplayMessage > messages ) {
-		this.messages = messages;
+	public void setUpdatedMessages( ArrayList< DisplayMessage > messages ) {
+		this.updatedMessages = messages;
+	}
+
+	/**
+	 * @return the Date when this UpdatePackage was created
+	 */
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
 }

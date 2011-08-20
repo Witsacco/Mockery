@@ -47,6 +47,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>leaveService</servlet-name>
+		<servlet-class>com.witsacco.mockery.server.LeaveServiceImpl</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>leaveService</servlet-name>
+		<url-pattern>/mockery/leave</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>com.witsacco.mockery.server.LoginServiceImpl</servlet-class>
 	</servlet>
