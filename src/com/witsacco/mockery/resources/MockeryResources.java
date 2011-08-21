@@ -25,6 +25,9 @@ public interface MockeryResources extends ClientBundle {
 
 	@Source( "Login.css" )
 	public LoginCSS loginCss();
+	
+	@Source("Join.css")
+	public JoinCSS joinCss();
 
 	@Source( "spinner.gif" )
 	ImageResource spinner();
