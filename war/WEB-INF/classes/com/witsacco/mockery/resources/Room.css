@@ -34,7 +34,9 @@
 	font-weight: bold;
 }
 
-.spinner {
-	background: url(spinner.gif) center no-repeat;
+@sprite .spinner {
+	gwt-image: 'spinner';
+	background-position: center;
+	background-repeat: no-repeat;
 	padding-right: 3px;
 }

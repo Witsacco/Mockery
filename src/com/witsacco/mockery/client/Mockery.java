@@ -16,7 +16,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -33,7 +32,8 @@ import com.witsacco.mockery.events.NewMessagesAvailableEvent;
 import com.witsacco.mockery.events.NewMessagesAvailableEventHandler;
 import com.witsacco.mockery.events.ScoreboardUpdateAvailableEvent;
 import com.witsacco.mockery.events.ScoreboardUpdateAvailableEventHandler;
-import com.witsacco.mockery.resources.LoginCSS;
+import com.witsacco.mockery.events.UserLoginEvent;
+import com.witsacco.mockery.events.UserLoginEventHandler;
 import com.witsacco.mockery.resources.MockeryCSS;
 import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.services.GetUpdatesService;
@@ -42,8 +42,6 @@ import com.witsacco.mockery.services.JoinService;
 import com.witsacco.mockery.services.JoinServiceAsync;
 import com.witsacco.mockery.services.LeaveService;
 import com.witsacco.mockery.services.LeaveServiceAsync;
-import com.witsacco.mockery.services.LoginService;
-import com.witsacco.mockery.services.LoginServiceAsync;
 import com.witsacco.mockery.services.MessagePostedService;
 import com.witsacco.mockery.services.MessagePostedServiceAsync;
 import com.witsacco.mockery.services.MessageScoreService;
@@ -64,57 +62,37 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	// Our update poller
 	private UpdatePoller poller;
 
+	private MockeryEventManager eventManager;
+
 	// UI Elements
 	private Scoreboard scoreboard;
 	private Room room;
 	private InputField inputField;
 
+	private LoginScreen loginScreen;
+
 	private MessagePostedServiceAsync messagePostedSvc;
 
 	private MockeryCSS css = MockeryResources.INSTANCE.mockeryCss();
-	private LoginCSS loginCss = MockeryResources.INSTANCE.loginCss();
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 
-		// Create an instance of the login service
-		LoginServiceAsync loginService = GWT.create( LoginService.class );
+		eventManager = new MockeryEventManager();
+
+		loginScreen = new LoginScreen();
+
+		loginScreen.addUserLoginEventHandler( eventManager );
 
 		// Attempt to log the user in
-		loginService.login( GWT.getHostPageBaseURL(), new LoginHandler() );
+		loginScreen.login();
 	}
 
 	private void showLoginScreen() {
-
-		loginCss.ensureInjected();
-
-		// Panel for the login screen
-		FlowPanel loginPanel = new FlowPanel();
-		loginPanel.addStyleName( loginCss.loginPanel() );
-
-		// Labels for the login screen
-		Label loginHeader = new Label( "Welcome to Mockery, a-hole." );
-		Label loginInstructions = new Label( "To get started, sign in with your Google account." );
-		Label loginChallenge = new Label( "Be prepared to bring your A game." );
-
-		// Login button and panel
-		Anchor loginButton = new Anchor( "Sign in with Google" );
-		loginButton.addStyleName( "login-button" );
-		loginButton.setHref( loginInfo.getLoginUrl() );
-		FlowPanel loginButtonPanel = new FlowPanel();
-		loginButtonPanel.add( loginButton );
-
-		// Assemble the panel
-		loginPanel.add( loginHeader );
-		loginPanel.add( loginInstructions );
-		loginPanel.add( loginButtonPanel );
-		loginPanel.add( loginChallenge );
-
 		// Add the login panel to the root page element
-		RootLayoutPanel rp = RootLayoutPanel.get();
-		rp.add( loginPanel );
+		RootLayoutPanel.get().add( loginScreen );
 	}
 
 	private void showJoinScreen() {
@@ -131,14 +109,14 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// TODO Make this more modular (room names & ids)
 		roomSelector.addItem( "Main Room", "1" );
-		
+
 		// TODO Duplicate code below!
-		
+
 		handleField.addKeyPressHandler( new KeyPressHandler() {
 
 			@Override
 			public void onKeyPress( KeyPressEvent event ) {
-				
+
 				// Leave if we didn't see the enter key
 				if ( event.getNativeEvent().getKeyCode() != KeyCodes.KEY_ENTER ) {
 					return;
@@ -159,7 +137,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 				event.preventDefault();
 			}
 		} );
-		
+
 		Button joinButton = new Button( "Join the room", new ClickHandler() {
 			public void onClick( ClickEvent click ) {
 				// Set the session's active room
@@ -208,7 +186,8 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	}
 
 	/**
-	 * Sets up listeners for new messages posted by the user or new messages posted by other users
+	 * Sets up listeners for new messages posted by the user or new messages
+	 * posted by other users
 	 */
 	private void initializeHandlers() {
 
@@ -220,7 +199,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 
 		// Add listener on poller for standings updates
 		poller.addScoreboardUpdateAvailableEventHandler( this );
-		
+
 		// Add listener for the window close event to log the user out
 		Window.addWindowClosingHandler( this );
 
@@ -282,10 +261,6 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		// Add the page panel to the root page element
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add( pagePanel );
-	}
-
-	public void updateMessage() {
-
 	}
 
 	@Override
@@ -353,31 +328,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	}
 
 	/**
-	 * Private inner class which implements the callback for logging in. On successful login, this will prompt the
-	 * user for a handle.
-	 */
-	private class LoginHandler implements AsyncCallback< LoginInfo > {
-
-		public void onFailure( Throwable error ) {
-			// TODO Handle an error on login more elegantly
-			Window.alert( error.getMessage() );
-		}
-
-		public void onSuccess( LoginInfo result ) {
-			loginInfo = result;
-
-			if ( loginInfo.isLoggedIn() ) {
-				showJoinScreen();
-			}
-			else {
-				showLoginScreen();
-			}
-		}
-	}
-
-	/**
-	 * Private inner class which implements the callback for prompting a logged-in user for a handle. Once the user
-	 * sets a handle, this will initialize Mockery for use.
+	 * Private inner class which implements the callback for prompting a
+	 * logged-in user for a handle. Once the user sets a handle, this will
+	 * initialize Mockery for use.
 	 */
 	private class JoinHandler implements AsyncCallback< DisplayUser > {
 
@@ -403,8 +356,9 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	}
 
 	/**
-	 * Private inner class which implements the callback for getting the first set of room updates. This will make
-	 * sure the room is ready for updates (e.g. has the current standings on the scoreboard.
+	 * Private inner class which implements the callback for getting the first
+	 * set of room updates. This will make sure the room is ready for updates
+	 * (e.g. has the current standings on the scoreboard.
 	 */
 	private class InitialUpdateHandler implements AsyncCallback< UpdatePackage > {
 
@@ -436,7 +390,7 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 	 * Private inner class which goes back to the join screen after leaving
 	 */
 	private class LeaveHandler implements AsyncCallback< Void > {
-		
+
 		public void onFailure( Throwable error ) {
 			// TODO Handle an error on join more elegantly
 		}
@@ -444,12 +398,28 @@ public class Mockery implements EntryPoint, MessagePostedEventHandler, NewMessag
 		public void onSuccess( Void nothing ) {
 			if ( loginInfo.isLoggedIn() ) {
 				showJoinScreen();
-			}
-			else {
+			} else {
 				showLoginScreen();
 			}
 
 		}
 	}
 
+	/**
+	 * Class for handling mockery-related events
+	 * 
+	 */
+	private class MockeryEventManager implements UserLoginEventHandler {
+
+		@Override
+		public void onUserLogin( UserLoginEvent event ) {
+			loginInfo = event.getLoginInfo();
+
+			if ( loginInfo.isLoggedIn() ) {
+				showJoinScreen();
+			} else {
+				showLoginScreen();
+			}
+		}
+	}
 }
