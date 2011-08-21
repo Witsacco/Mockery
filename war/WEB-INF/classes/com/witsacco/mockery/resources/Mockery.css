@@ -12,8 +12,10 @@
 .page-panel .main-dock {
 	height: 600px;
 	width: 650px;	
-	top: 100px;
+	top: 50px;
 	border: 2px solid #000000;
+	position: relative;
+	left: -325px;
 }
 
 .page-panel .main-dock .header {
