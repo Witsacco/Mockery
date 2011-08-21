@@ -3,6 +3,9 @@ package com.witsacco.mockery.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -21,7 +24,7 @@ import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.services.JoinService;
 import com.witsacco.mockery.services.JoinServiceAsync;
 
-public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandlers {
+public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandlers, KeyPressHandler {
 
 	// Handle to bundled CSS resources
 	private JoinCSS css = MockeryResources.INSTANCE.joinCss();
@@ -80,14 +83,29 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 		add( setupRoomSelector() );
 
 		userHandleInput = new TextBox();
+		userHandleInput.addKeyPressHandler( this );
 		add( userHandleInput );
 
 		joinButton = new Button( "Join Room", this );
+		joinButton.addClickHandler( this );
 		add( joinButton );
 	}
 
 	public void onClick( ClickEvent event ) {
+		join();
+	}
 
+	public void onKeyPress( KeyPressEvent event ) {
+		// Leave if we didn't see the enter key
+		if ( event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER ) {
+			join();
+
+			// Cancel enter key
+			event.preventDefault();
+		}
+	}
+	
+	private void join() {
 		// Get the session's active room
 		activeRoom = Integer.parseInt( roomSelector.getValue( roomSelector.getSelectedIndex() ) );
 
@@ -97,7 +115,7 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 		// Register this user
 		joinService.join( activeRoom, handle, joinHandler );
 	}
-
+	
 	/**
 	 * This sub is responsible for grabbing all active rooms. For now, it simply
 	 * sets up one room
