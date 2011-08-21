@@ -12,8 +12,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
-import com.witsacco.mockery.events.MessagePostedEvent;
-import com.witsacco.mockery.events.MessagePostedEventHandler;
+import com.witsacco.mockery.events.MessageEnteredEvent;
+import com.witsacco.mockery.events.MessageEnteredEventHandler;
 import com.witsacco.mockery.resources.InputFieldCSS;
 import com.witsacco.mockery.resources.MockeryResources;
 
@@ -86,8 +86,7 @@ public class InputField implements HasHandlers {
 				}
 
 				// Fire off a new message event
-				MessagePostedEvent newPostEvent = new MessagePostedEvent( getText() );
-		        fireEvent( newPostEvent );
+		        fireEvent( new MessageEnteredEvent( getText() ) );
 
 		        // Clear the text area
 				inputArea.setText( "" );
@@ -127,7 +126,7 @@ public class InputField implements HasHandlers {
 	}
 
 	public HandlerRegistration addMessageReceivedEventHandler(
-			MessagePostedEventHandler handler ) {
-		return handlerManager.addHandler( MessagePostedEvent.TYPE, handler );
+			MessageEnteredEventHandler handler ) {
+		return handlerManager.addHandler( MessageEnteredEvent.TYPE, handler );
 	}
 }

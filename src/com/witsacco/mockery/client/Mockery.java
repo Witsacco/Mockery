@@ -16,8 +16,12 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.witsacco.mockery.events.InitialLoadEvent;
 import com.witsacco.mockery.events.InitialLoadEventHandler;
+import com.witsacco.mockery.events.MessageEnteredEvent;
+import com.witsacco.mockery.events.MessageEnteredEventHandler;
 import com.witsacco.mockery.events.MessagePostedEvent;
 import com.witsacco.mockery.events.MessagePostedEventHandler;
+import com.witsacco.mockery.events.MessageScoredEvent;
+import com.witsacco.mockery.events.MessageScoredEventHandler;
 import com.witsacco.mockery.events.NewMessagesAvailableEvent;
 import com.witsacco.mockery.events.NewMessagesAvailableEventHandler;
 import com.witsacco.mockery.events.ScoreboardUpdateAvailableEvent;
@@ -30,10 +34,6 @@ import com.witsacco.mockery.resources.MockeryCSS;
 import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.services.LeaveService;
 import com.witsacco.mockery.services.LeaveServiceAsync;
-import com.witsacco.mockery.services.MessagePostedService;
-import com.witsacco.mockery.services.MessagePostedServiceAsync;
-import com.witsacco.mockery.services.MessageScoreService;
-import com.witsacco.mockery.services.MessageScoreServiceAsync;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -50,6 +50,9 @@ public class Mockery implements EntryPoint {
 	private UpdatePoller poller;
 
 	private MockeryEventManager eventManager;
+	
+	// Class for posting and scoring new messages
+	private MessagePoster messagePoster;
 
 	// UI Elements
 	private Scoreboard scoreboard;
@@ -57,8 +60,6 @@ public class Mockery implements EntryPoint {
 	private InputField inputField;
 
 	private LoginScreen loginScreen;
-
-	private MessagePostedServiceAsync messagePostedSvc;
 
 	private MockeryCSS css = MockeryResources.INSTANCE.mockeryCss();
 
@@ -116,6 +117,13 @@ public class Mockery implements EntryPoint {
 	 */
 	private void initializeHandlers() {
 
+		// Initialize the message posting and scoring service
+		messagePoster = new MessagePoster( activeRoom );
+
+		// Add listeners for message posted and message scored events
+		messagePoster.addMessagePostedEventHandler( eventManager );
+		messagePoster.addMessageScoredEventHandler( eventManager );
+		
 		// Add listener on input field for new messages
 		inputField.addMessageReceivedEventHandler( eventManager );
 
@@ -212,8 +220,8 @@ public class Mockery implements EntryPoint {
 	 * 
 	 */
 	private class MockeryEventManager implements UserLoginEventHandler, UserJoinedEventHandler,
-			MessagePostedEventHandler, NewMessagesAvailableEventHandler, ScoreboardUpdateAvailableEventHandler,
-			Window.ClosingHandler, InitialLoadEventHandler {
+			MessageEnteredEventHandler, NewMessagesAvailableEventHandler, ScoreboardUpdateAvailableEventHandler,
+			Window.ClosingHandler, InitialLoadEventHandler, MessagePostedEventHandler, MessageScoredEventHandler {
 
 		@Override
 		public void onUserLogin( UserLoginEvent event ) {
@@ -244,67 +252,6 @@ public class Mockery implements EntryPoint {
 		}
 
 		@Override
-		public void onMessageReceived( MessagePostedEvent event ) {
-
-			// Initialize the service proxy.
-			if ( messagePostedSvc == null ) {
-				messagePostedSvc = GWT.create( MessagePostedService.class );
-			}
-
-			// Set up the callback object.
-			AsyncCallback< DisplayMessage > callback = new AsyncCallback< DisplayMessage >() {
-				public void onFailure( Throwable caught ) {
-					Window.alert( "Something went wrong!" );
-				}
-
-				public void onSuccess( final DisplayMessage result ) {
-
-					// Score the new message
-					// TODO Clean this up!
-					MessageScoreServiceAsync scoringSvc = GWT.create( MessageScoreService.class );
-					scoringSvc.scoreMessage( activeRoom, result.getMessageId(), new AsyncCallback< MessageScore >() {
-						public void onFailure( Throwable caught ) {
-							Window.alert( "Something went wrong in the scoring service" );
-						}
-
-						public void onSuccess( MessageScore score ) {
-							result.setScore( score.getScore() );
-							result.setScoreReason( score.getExplanation() );
-
-							room.handleIncomingMessage( result );
-						}
-					} );
-
-					// Add the message to the room
-					room.addMessage( result );
-				}
-			};
-
-			// Call the MessagePostedService
-			messagePostedSvc.postMessage( activeRoom, event.getMessage(), callback );
-		}
-
-		@Override
-		public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
-			for ( DisplayMessage message : event.getNewMessages() ) {
-				room.handleIncomingMessage( message );
-			}
-		}
-
-		@Override
-		public void onScoreboardUpdateAvailable( ScoreboardUpdateAvailableEvent event ) {
-			// Update the scoreboard with the current standings
-			scoreboard.update( event.getCurrentStandings() );
-		}
-
-		@Override
-		public void onWindowClosing( ClosingEvent event ) {
-			// The user is leaving, log them out
-			LeaveServiceAsync leaveService = GWT.create( LeaveService.class );
-			leaveService.leave( activeRoom, new LeaveHandler() );
-		}
-
-		@Override
 		public void onInitialLoad( InitialLoadEvent event ) {
 
 			// Grrab the initial state
@@ -324,6 +271,43 @@ public class Mockery implements EntryPoint {
 
 			// Start polling for new messages
 			poller.startPolling();
+		}
+
+		@Override
+		public void onMessageEntered( MessageEnteredEvent event ) {
+			messagePoster.postMessage( event.getMessage() );
+		}
+
+		@Override
+		public void onNewMessagesAvailable( NewMessagesAvailableEvent event ) {
+			for ( DisplayMessage message : event.getNewMessages() ) {
+				room.handleIncomingMessage( message );
+			}
+		}
+
+		@Override
+		public void onScoreboardUpdateAvailable( ScoreboardUpdateAvailableEvent event ) {
+			// Update the scoreboard with the current standings
+			scoreboard.update( event.getCurrentStandings() );
+		}
+
+		@Override
+		public void onMessageScored( MessageScoredEvent event ) {
+			// Update the room with the now-scored message
+			room.handleIncomingMessage( event.getScoredMessage() );
+		}
+
+		@Override
+		public void onMessagePosted( MessagePostedEvent event ) {
+			// Add the message to the room
+			room.addMessage( event.getMessage() );
+		}
+		
+		@Override
+		public void onWindowClosing( ClosingEvent event ) {
+			// The user is leaving, log them out
+			LeaveServiceAsync leaveService = GWT.create( LeaveService.class );
+			leaveService.leave( activeRoom, new LeaveHandler() );
 		}
 	}
 }

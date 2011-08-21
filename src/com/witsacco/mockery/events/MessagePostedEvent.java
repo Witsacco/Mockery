@@ -1,15 +1,16 @@
 package com.witsacco.mockery.events;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.witsacco.mockery.client.DisplayMessage;
 
 public class MessagePostedEvent extends GwtEvent< MessagePostedEventHandler > {
 
 	public static Type< MessagePostedEventHandler > TYPE = new Type< MessagePostedEventHandler >();
 
-	private final String message;
-
-	public MessagePostedEvent( String message ) {
-		this.message = message;
+	private DisplayMessage displayMessage;
+	
+	public MessagePostedEvent( DisplayMessage message ) {
+		displayMessage = message;
 	}
 
 	@Override
@@ -19,10 +20,10 @@ public class MessagePostedEvent extends GwtEvent< MessagePostedEventHandler > {
 
 	@Override
 	protected void dispatch( MessagePostedEventHandler handler ) {
-		handler.onMessageReceived( this );
+		handler.onMessagePosted( this );
 	}
-
-	public String getMessage() {
-		return message;
+	
+	public DisplayMessage getMessage() {
+		return displayMessage;
 	}
 }
