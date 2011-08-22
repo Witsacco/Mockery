@@ -17,4 +17,6 @@ public interface MockeryCSS extends CssResource {
 	String spinnerPanel();
 
 	String sheep();
+	
+//	String trees();
 }

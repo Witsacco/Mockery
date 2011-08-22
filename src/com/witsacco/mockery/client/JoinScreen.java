@@ -13,6 +13,7 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -24,12 +25,12 @@ import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.services.JoinService;
 import com.witsacco.mockery.services.JoinServiceAsync;
 
-public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandlers, KeyPressHandler {
+public class JoinScreen extends DecoratorPanel implements ClickHandler, HasHandlers, KeyPressHandler {
 
 	// Handle to bundled CSS resources
 	private JoinCSS css = MockeryResources.INSTANCE.joinCss();
 
-	private static final String JOIN_MESSAGE = "This obviously needs style, Drywit.";
+	private static final String JOIN_MESSAGE = "Please choose a screen name:";
 
 	// Service for joining a room
 	private JoinServiceAsync joinService;
@@ -60,6 +61,9 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 
 		// Set up the UI for the Join Panel
 		initializeUI();
+		
+		// Set the focus to the input box
+		userHandleInput.setFocus( true );
 	}
 
 	// Pass along event listener registration to join handler
@@ -72,22 +76,31 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 		// Inject CSS for join screen
 		css.ensureInjected();
 
+		// Add some styling to the main decorator panel
+		addStyleName( css.decorator() );
+
+		VerticalPanel mainPanel = new VerticalPanel();
+		
 		// Add styling to the join panel
-		addStyleName( css.joinPanel() );
+		mainPanel.addStyleName( css.joinPanel() );
 
 		// Add a welcoming message
 		Label welcomeMessage = new Label( JOIN_MESSAGE );
-		add( welcomeMessage );
-
-		// Set up the room selection dropdown and add it to the panel
-		add( setupRoomSelector() );
+		welcomeMessage.addStyleName( css.joinMessage() );
+		mainPanel.add( welcomeMessage );
 
 		userHandleInput = new TextBox();
 		userHandleInput.addKeyPressHandler( this );
-		add( userHandleInput );
+		mainPanel.add( userHandleInput );
+
+		// Set up the room selection dropdown and add it to the panel
+		mainPanel.add( setupRoomSelector() );
 
 		joinButton = new Button( "Join Room", this );
-		add( joinButton );
+		joinButton.addStyleName( css.joinButton() );
+		mainPanel.add( joinButton );
+		
+		add( mainPanel );
 	}
 
 	public void onClick( ClickEvent event ) {
@@ -111,6 +124,11 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 
 		// Grab the user's requested handle
 		String handle = userHandleInput.getText();
+		
+		// If no screen name was chosen, just leave
+		if ( handle.length() == 0 ) {
+			return;
+		}
 
 		// Register this user
 		joinService.join( activeRoom, handle, joinHandler );
@@ -124,6 +142,7 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 
 		// Set up the new ListBox for choosing the desired room
 		roomSelector = new ListBox();
+		roomSelector.addStyleName( css.roomChooser() );
 
 		// For now there is only one room
 		roomSelector.addItem( "Main Room", "1" );

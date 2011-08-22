@@ -142,7 +142,7 @@ public class Mockery implements EntryPoint {
 		// Create a panel to span the page and align its contents in the center
 		HorizontalPanel pagePanel = new HorizontalPanel();
 		pagePanel.addStyleName( css.pagePanel() );
-		pagePanel.addStyleName( css.sheep() );
+//		pagePanel.addStyleName( css.sheep() );
 		pagePanel.setHorizontalAlignment( HorizontalPanel.ALIGN_CENTER );
 
 		// Set up the main container to hold the scoreboard, room and entry
@@ -193,8 +193,8 @@ public class Mockery implements EntryPoint {
 		// Add the page panel to the root page element
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add( pagePanel );
+		rp.setStyleName( css.sheep() );
 	}
-
 
 	/*
 	 * Private inner class which goes back to the join screen after leaving
