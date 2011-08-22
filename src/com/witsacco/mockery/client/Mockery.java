@@ -125,7 +125,7 @@ public class Mockery implements EntryPoint {
 		messagePoster.addMessageScoredEventHandler( eventManager );
 		
 		// Add listener on input field for new messages
-		inputField.addMessageReceivedEventHandler( eventManager );
+		inputField.addMessageEnteredEventHandler( eventManager );
 
 		// Add listener on poller for incoming messages
 		poller.addNewMessagesAvailableEventHandler( eventManager );

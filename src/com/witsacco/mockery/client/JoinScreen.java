@@ -56,7 +56,7 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 		joinHandler = new JoinHandler();
 
 		// Initialize GWT event handler manager
-		handlerManager = new HandlerManager( joinHandler );
+		handlerManager = new HandlerManager( this );
 
 		// Set up the UI for the Join Panel
 		initializeUI();
@@ -87,7 +87,6 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 		add( userHandleInput );
 
 		joinButton = new Button( "Join Room", this );
-		joinButton.addClickHandler( this );
 		add( joinButton );
 	}
 
@@ -106,6 +105,7 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 	}
 	
 	private void join() {
+		
 		// Get the session's active room
 		activeRoom = Integer.parseInt( roomSelector.getValue( roomSelector.getSelectedIndex() ) );
 
@@ -151,8 +151,7 @@ public class JoinScreen extends VerticalPanel implements ClickHandler, HasHandle
 		public void onSuccess( DisplayUser dUser ) {
 
 			// Fire an event notifying Mockery that the user joined the room
-			UserJoinedEvent userJoined = new UserJoinedEvent( dUser, activeRoom );
-			fireEvent( userJoined );
+			fireEvent( new UserJoinedEvent( dUser, activeRoom ) );
 		}
 	}
 }
