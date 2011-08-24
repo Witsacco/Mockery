@@ -61,11 +61,13 @@ public class JoinScreen extends DecoratorPanel implements ClickHandler, HasHandl
 
 		// Set up the UI for the Join Panel
 		initializeUI();
-		
+	}
+
+	public void setFocus() {
 		// Set the focus to the input box
 		userHandleInput.setFocus( true );
 	}
-
+	
 	// Pass along event listener registration to join handler
 	public HandlerRegistration addUserJoinedEventHandler( UserJoinedEventHandler handler ) {
 		return handlerManager.addHandler( UserJoinedEvent.TYPE, handler );
