@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.witsacco.mockery.events.InitialLoadEvent;
 import com.witsacco.mockery.events.InitialLoadEventHandler;
 import com.witsacco.mockery.events.MessageEnteredEvent;
@@ -178,16 +177,13 @@ public class Mockery implements EntryPoint {
 		mainDock.addNorth( header, 5 );
 
 		// Add the Input to the main UI
-		Widget inputPanel = inputField.getPanel();
-		mainDock.addSouth( inputPanel, 15 );
+		mainDock.addSouth( inputField, 15 );
 
 		// Add the Room to the main UI
-		Widget roomPanel = room.getPanel();
-		mainDock.addWest( roomPanel, 65 );
+		mainDock.addWest( room, 65 );
 
 		// Add the Scoreboard to the main UI
-		Widget scoreboardPanel = scoreboard.getPanel();
-		mainDock.add( scoreboardPanel );
+		mainDock.add( scoreboard );
 
 		// Add the main dock panel to the page panel
 		pagePanel.add( mainDock );
@@ -195,7 +191,9 @@ public class Mockery implements EntryPoint {
 		// Add the page panel to the root page element
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add( pagePanel );
-//		rp.setStyleName( css.sheep() );
+
+		// Give focus to the inputField
+		inputField.setFocus();
 	}
 
 	/*

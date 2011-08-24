@@ -4,20 +4,21 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.resources.RoomCSS;
 
-public class Room {
+public class Room extends ScrollPanel {
 
 	ArrayList< DisplayMessage > messages;
 
-	private ScrollPanel mainPanel;
 	private FlexTable messageTable;
 
 	private RoomCSS css = MockeryResources.INSTANCE.roomCss();
 
 	public Room() {
+		// Invoke superclass constructor
+		super();
+		
 		messages = new ArrayList< DisplayMessage >();
 
 		// Set up the Room UI components
@@ -29,17 +30,13 @@ public class Room {
 		// Inject CSS
 		css.ensureInjected();
 		
-		mainPanel = new ScrollPanel();
-		mainPanel.addStyleName( css.roomPanel() );
+		// Add basic styling
+		addStyleName( css.roomPanel() );
 
 		messageTable = new FlexTable();
 		messageTable.addStyleName( css.messageTable() );
 
-		mainPanel.add( messageTable );
-	}
-
-	public Widget getPanel() {
-		return mainPanel;
+		add( messageTable );
 	}
 
 	public void addMessage( DisplayMessage message ) {

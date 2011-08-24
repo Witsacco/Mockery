@@ -11,26 +11,26 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.Widget;
 import com.witsacco.mockery.events.MessageEnteredEvent;
 import com.witsacco.mockery.events.MessageEnteredEventHandler;
 import com.witsacco.mockery.resources.InputFieldCSS;
 import com.witsacco.mockery.resources.MockeryResources;
 
-public class InputField implements HasHandlers {
+public class InputField extends FlowPanel implements HasHandlers {
 
 	// GWT event handler manager
 	private HandlerManager handlerManager;
 
 	// UI elements managed by this class
-	private FlowPanel mainPanel;
 	private LayoutPanel layout;
 	private TextArea inputArea;
 
 	private InputFieldCSS css = MockeryResources.INSTANCE.inputFieldCss();
 	
 	public InputField() {
-
+		// Invoke superclass constructor
+		super();
+		
 		// Initialize GWT event handler manager
 		handlerManager = new HandlerManager( this );
 
@@ -45,9 +45,8 @@ public class InputField implements HasHandlers {
 
 		css.ensureInjected();
 		
-		// Set up the main panel to hold the InputField UI elements
-		mainPanel = new FlowPanel();
-		mainPanel.addStyleName( css.inputPanel() );
+		// Give this panel some basic styling
+		addStyleName( css.inputPanel() );
 
 		// Set up input area
 		inputArea = new TextArea();
@@ -68,9 +67,13 @@ public class InputField implements HasHandlers {
 		layout.setWidgetTopBottom( inputArea, 4, Unit.PCT, 4, Unit.PCT );
 
 		// Add the layout manager to the main panel for this class
-		mainPanel.add( layout );
+		add( layout );
 	}
 
+	public void setFocus() {
+		inputArea.setFocus( true );
+	}
+	
 	/**
 	 * Sets up the listener on the text area
 	 */
@@ -95,15 +98,6 @@ public class InputField implements HasHandlers {
 				event.preventDefault();
 			}
 		} );
-	}
-
-	/**
-	 * Grabs the main panel (initialized in constructor)
-	 * 
-	 * @return Main panel for this class
-	 */
-	public Widget getPanel() {
-		return mainPanel;
 	}
 
 	/**

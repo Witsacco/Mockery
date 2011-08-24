@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.resources.ScoreboardCSS;
 
-public class Scoreboard {
+public class Scoreboard extends ScrollPanel {
 
-	private ScrollPanel mainPanel;
 	private FlexTable scoreTable;
 
 	private ScoreboardCSS css = MockeryResources.INSTANCE.scoreboardCss();
 
 	public Scoreboard() {
+		// Invoke superclass constructor
+		super();
+
 		initializeUI();
 	}
 
@@ -23,16 +24,14 @@ public class Scoreboard {
 
 		css.ensureInjected();
 
-		// Create a scroll panel to hold the scoreboard table
-		mainPanel = new ScrollPanel();
-		mainPanel.addStyleName( css.scoreboardPanel() );
+		addStyleName( css.scoreboardPanel() );
 
 		scoreTable = new FlexTable();
 		scoreTable.addStyleName( css.scoreTable() );
 
 		resetScoreboard();
 
-		mainPanel.add( scoreTable );
+		add( scoreTable );
 	}
 
 	private void resetScoreboard() {
@@ -43,10 +42,6 @@ public class Scoreboard {
 		scoreTable.setText( 0, 0, "User" );
 		scoreTable.setText( 0, 1, "Score" );
 		scoreTable.getRowFormatter().addStyleName( 0, css.scoreHeader() );
-	}
-
-	public Widget getPanel() {
-		return mainPanel;
 	}
 
 	void addUser( DisplayUser user ) {
@@ -79,9 +74,4 @@ public class Scoreboard {
 		}
 
 	}
-
-	//
-	// ArrayList< MockeryUser > getStandings() {
-	//
-	// }
 }
