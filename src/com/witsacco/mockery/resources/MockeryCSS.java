@@ -4,9 +4,9 @@ import com.google.gwt.resources.client.CssResource;
 
 public interface MockeryCSS extends CssResource {
 
-	@ClassName( "page-panel" )
-	String pagePanel();
-
+	@ClassName( "window-pane")
+	String windowPane();
+	
 	@ClassName( "main-dock")
 	String mainDock();
 	
@@ -17,6 +17,4 @@ public interface MockeryCSS extends CssResource {
 	String spinnerPanel();
 
 	String sheep();
-	
-//	String trees();
 }

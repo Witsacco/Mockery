@@ -1,37 +1,49 @@
 @CHARSET "ISO-8859-1";
 
-.page-panel {
-	width: 100%;
-	height: 100%;
+body {
+	background-color: #DDDDFF;
+}
+
+.window-pane {
+	margin: 40px;
+	background-color: #DDDDFF;
 }
 
 @sprite .sheep {
 	gwt-image: 'sheep';
 }
 
-.page-panel .main-dock {
-	height: 600px;
-	width: 650px;	
-	top: 50px;
-	border: 2px solid #000000;
+.main-dock {
+	border: 2px solid #777;
+	border-top-color: #444;
+	border-left-color: #444;
+	text-align: left;
+	padding: 10px;
 	position: relative;
-	left: -325px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 3px 3px 5px #333;
+	-webkit-box-shadow: 3px 3px 5px #333;
+	box-shadow: 3px 3px 5px #333;
+	width: 97%;
+	height: 95%;
 }
 
-.page-panel .main-dock .header {
+.main-dock .header {
 	background-color: #BBB;
 	border-bottom: 2px solid #666;
 }
 
 @external gwt-Label-main-title;
-.page-panel .main-dock .header .gwt-Label-main-title {
+.main-dock .header .gwt-Label-main-title {
 	font-size: 18px;
 	font-family: 'Permanent Marker', cursive;
 	padding-left: 15px;
 }
 
 @external gwt-Anchor-logout-button;
-.page-panel .main-dock .header .gwt-Anchor-logout-button {
+.main-dock .header .gwt-Anchor-logout-button {
 	padding-right: 15px;	
 	font-weight: bold;
 }

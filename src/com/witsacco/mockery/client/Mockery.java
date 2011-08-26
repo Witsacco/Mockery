@@ -141,10 +141,8 @@ public class Mockery implements EntryPoint {
 
 	private void initializeUI() {
 
-		// Create a panel to span the page and align its contents in the center
-		HorizontalPanel pagePanel = new HorizontalPanel();
-		pagePanel.addStyleName( css.pagePanel() );
-		pagePanel.setHorizontalAlignment( HorizontalPanel.ALIGN_CENTER );
+		// Add the appropriate Mockery CSS
+		css.ensureInjected();
 
 		// Set up the main container to hold the scoreboard, room and entry
 		DockLayoutPanel mainDock = new DockLayoutPanel( Unit.PCT );
@@ -185,12 +183,10 @@ public class Mockery implements EntryPoint {
 		// Add the Scoreboard to the main UI
 		mainDock.add( scoreboard );
 
-		// Add the main dock panel to the page panel
-		pagePanel.add( mainDock );
-
 		// Add the page panel to the root page element
 		RootLayoutPanel rp = RootLayoutPanel.get();
-		rp.add( pagePanel );
+		rp.add( mainDock );
+		rp.setStyleName( css.windowPane() );
 
 		// Give focus to the inputField
 		inputField.setFocus();
@@ -236,9 +232,6 @@ public class Mockery implements EntryPoint {
 
 		@Override
 		public void onUserJoined( UserJoinedEvent event ) {
-			// Add the appropriate Mockery CSS
-			css.ensureInjected();
-
 			activeRoom = event.getRoomId();
 
 			// Create UI elements
