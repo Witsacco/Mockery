@@ -15,8 +15,6 @@ body {
 
 .main-dock {
 	border: 2px solid #777;
-	border-top-color: #444;
-	border-left-color: #444;
 	text-align: left;
 	padding: 10px;
 	position: relative;
@@ -31,8 +29,11 @@ body {
 }
 
 .main-dock .header {
-	background-color: #BBB;
 	border-bottom: 2px solid #666;
+	background-color: #BBB;
+	background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#f7f7f7),to(#BBB))");
+	background-image: literal("-moz-linear-gradient(top,#f7f7f7,#BBB)");
+	filter: literal("progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7',endColorstr='#dddddd')");
 }
 
 @external gwt-Label-main-title;
