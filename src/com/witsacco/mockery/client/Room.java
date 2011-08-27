@@ -3,6 +3,8 @@ package com.witsacco.mockery.client;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.resources.RoomCSS;
@@ -32,11 +34,17 @@ public class Room extends ScrollPanel {
 		
 		// Add basic styling
 		addStyleName( css.roomPanel() );
-
+		
+		HorizontalPanel roomPanel = new HorizontalPanel();
+		roomPanel.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_CENTER );
+		roomPanel.setWidth( "100%" );
+		
 		messageTable = new FlexTable();
 		messageTable.addStyleName( css.messageTable() );
 
-		add( messageTable );
+		roomPanel.add( messageTable );
+		
+		add( roomPanel );
 	}
 
 	public void addMessage( DisplayMessage message ) {

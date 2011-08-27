@@ -1,8 +1,12 @@
 package com.witsacco.mockery.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.witsacco.mockery.resources.MockeryResources;
 import com.witsacco.mockery.resources.ScoreboardCSS;
@@ -12,11 +16,16 @@ public class Scoreboard extends ScrollPanel {
 	private FlexTable scoreTable;
 
 	private ScoreboardCSS css = MockeryResources.INSTANCE.scoreboardCss();
+	
+	ArrayList< DisplayUser > priorStandings;
 
 	public Scoreboard() {
 		// Invoke superclass constructor
 		super();
 
+		// Initialize the reference to the prior standings
+		priorStandings = new ArrayList< DisplayUser >();
+		
 		initializeUI();
 	}
 
@@ -26,12 +35,18 @@ public class Scoreboard extends ScrollPanel {
 
 		addStyleName( css.scoreboardPanel() );
 
+		HorizontalPanel mainPanel = new HorizontalPanel();
+		mainPanel.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_CENTER );
+		mainPanel.setWidth( "100%" );
+
 		scoreTable = new FlexTable();
 		scoreTable.addStyleName( css.scoreTable() );
+		mainPanel.add( scoreTable );
 
+		add( mainPanel );
+
+		// Initialize the header on table
 		resetScoreboard();
-
-		add( scoreTable );
 	}
 
 	private void resetScoreboard() {
@@ -56,8 +71,7 @@ public class Scoreboard extends ScrollPanel {
 		// Add a bullet for the user's online status
 		if ( user.isLoggedIn() ) {
 			scoreTable.getCellFormatter().addStyleName( rowCount, 0, css.isOnline() );
-		}
-		else {
+		} else {
 			scoreTable.getCellFormatter().addStyleName( rowCount, 0, css.isOffline() );
 		}
 
@@ -65,13 +79,18 @@ public class Scoreboard extends ScrollPanel {
 		scoreTable.getRowFormatter().addStyleName( rowCount, ( rowCount % 2 == 0 ? css.rowEven() : css.rowOdd() ) );
 	}
 
-	public void update( ArrayList< DisplayUser > currentStandings ) {
+	public void update( ArrayList< DisplayUser > newStandings ) {
 
+		if ( Arrays.equals( priorStandings.toArray(), newStandings.toArray() ) ) {
+			return;
+		}
+		
 		resetScoreboard();
 
-		for ( DisplayUser u : currentStandings ) {
+		for ( DisplayUser u : newStandings ) {
 			addUser( u );
 		}
 
+		priorStandings = newStandings;
 	}
 }

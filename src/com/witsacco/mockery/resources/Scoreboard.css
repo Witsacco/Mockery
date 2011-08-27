@@ -3,11 +3,11 @@
 .scoreboard-panel {
 	background-color: #F5F7FF;
 	border-left: 1px solid #666;
+	padding: 10px;
 }
 
 .scoreboard-panel .score-table {
-	width: 95%;
-	margin-top: 5px;
+	width: 100%;
 	border-collapse: collapse;
 }
 
