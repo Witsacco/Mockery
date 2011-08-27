@@ -3,7 +3,6 @@ package com.witsacco.mockery.client;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;

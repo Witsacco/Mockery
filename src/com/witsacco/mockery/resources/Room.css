@@ -27,13 +27,21 @@
 	-webkit-border-radius: 10px 0px 0px 10px;
 	-moz-border-radius: 10px 0px 0px 10px;
 	border-left: 2px solid #555;
-	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+}
+
+.room-panel .message-table .row-even .sender-col {
+	background-image: literal("-webkit-gradient(linear, left top, right top, from(#AAA), to(#EDEDED))");
+	background-image: literal("-moz-gradient(linear, left top, right top, from(#AAA), to(#EDEDED))");
+}
+
+.room-panel .message-table .row-odd .sender-col {
+	background-image: literal("-webkit-gradient(linear, left top, right top, from(#888), to(#CCC))");
+	background-image: literal("-moz-gradient(linear, left top, right top, from(#888), to(#CCC))");
 }
 
 .room-panel .message-table .content-col {
 	padding: 5px;
-	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
 }
 
@@ -44,8 +52,11 @@
 	-webkit-border-radius: 0px 10px 10px 0px;
 	-moz-border-radius: 0px 10px 10px 0px;
 	border-right: 2px solid #555;
-	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+}
+
+.room-panel .message-table .first-row td {
+	border-top: 2px solid #555;
 }
 
 @sprite .spinner {

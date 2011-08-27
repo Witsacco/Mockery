@@ -25,5 +25,8 @@ public interface RoomCSS extends CssResource {
 	@ClassName("score-col")
 	String scoreCol();
 	
+	@ClassName( "first-row")
+	String firstRow();
+	
 	String spinner();
 }

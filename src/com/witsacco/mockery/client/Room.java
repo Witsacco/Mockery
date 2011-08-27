@@ -75,6 +75,10 @@ public class Room extends ScrollPanel {
 		messageTable.setText( rowId, 0, message.getAuthorName() );
 		messageTable.setText( rowId, 1, message.getBody() );
 
+		if ( rowId == 0 ) {
+			messageTable.getRowFormatter().addStyleName( 0, css.firstRow() );
+		}
+		
 		// Apply cell-level formatting
 		messageTable.getCellFormatter().addStyleName( rowId, 0, css.senderCol() );
 		messageTable.getCellFormatter().addStyleName( rowId, 1, css.contentCol() );
