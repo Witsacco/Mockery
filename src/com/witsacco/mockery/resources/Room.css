@@ -7,7 +7,7 @@
 }
 
 .room-panel .message-table {
-	border-collapse: collapse;
+	border-spacing: 0px;
 	width: 100%;
 }
 
@@ -23,15 +23,29 @@
 	font-weight: bold;
 	padding: 5px;
 	width: 125px;
+	border-radius: 10px 0px 0px 10px;
+	-webkit-border-radius: 10px 0px 0px 10px;
+	-moz-border-radius: 10px 0px 0px 10px;
+	border-left: 2px solid #555;
+	border-top: 2px solid #555;
+	border-bottom: 2px solid #555;
 }
 
 .room-panel .message-table .content-col {
 	padding: 5px;
+	border-top: 2px solid #555;
+	border-bottom: 2px solid #555;
 }
 
 .room-panel .message-table .score-col {
 	padding-right: 3px;
 	font-weight: bold;
+	border-radius: 0px 10px 10px 0px;
+	-webkit-border-radius: 0px 10px 10px 0px;
+	-moz-border-radius: 0px 10px 10px 0px;
+	border-right: 2px solid #555;
+	border-top: 2px solid #555;
+	border-bottom: 2px solid #555;
 }
 
 @sprite .spinner {
@@ -39,4 +53,10 @@
 	background-position: center;
 	background-repeat: no-repeat;
 	padding-right: 3px;
+	border-radius: 0px 10px 10px 0px;
+	-webkit-border-radius: 0px 10px 10px 0px;
+	-moz-border-radius: 0px 10px 10px 0px;
+	border-right: 2px solid #555;
+	border-top: 2px solid #555;
+	border-bottom: 2px solid #555;
 }
