@@ -3,6 +3,7 @@
 .input-panel {
 	background-color: #999;
 	border-top: 1px solid #666;
+	border-radius: 0px 0px 8px 8px;
 }
 
 .input-panel .layout-panel {

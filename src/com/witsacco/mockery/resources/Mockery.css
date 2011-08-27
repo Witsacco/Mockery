@@ -5,7 +5,6 @@ body {
 }
 
 .window-pane {
-	margin: 40px;
 	background-color: #DDDDFF;
 }
 
@@ -17,15 +16,16 @@ body {
 	border: 2px solid #777;
 	text-align: left;
 	padding: 10px;
-	position: relative;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 10px;
 	-moz-box-shadow: 3px 3px 5px #333;
 	-webkit-box-shadow: 3px 3px 5px #333;
 	box-shadow: 3px 3px 5px #333;
-	width: 97%;
-	height: 95%;
+	top: 15px !important;
+	bottom: 15px !important;
+	left: 15px !important;
+	right: 15px !important;
 }
 
 .main-dock .header {
@@ -34,6 +34,8 @@ body {
 	background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#f7f7f7),to(#BBB))");
 	background-image: literal("-moz-linear-gradient(top,#f7f7f7,#BBB)");
 	filter: literal("progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7',endColorstr='#dddddd')");
+	border-radius: 10px 10px 0px 0px;
+	
 }
 
 @external gwt-Label-main-title;
