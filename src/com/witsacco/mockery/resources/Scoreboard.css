@@ -1,9 +1,12 @@
 @CHARSET "ISO-8859-1";
 
 .scoreboard-panel {
-	background-color: #F5F7FF;
-	border-left: 1px solid #666;
+	background-color: #EDEDED;
+	border: 2px solid #777;
 	padding: 10px;
+	margin: 10px;
+	border-radius: 10px;
+	box-shadow: 3px 3px 6px #333;
 }
 
 .scoreboard-panel .score-table {

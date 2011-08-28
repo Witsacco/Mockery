@@ -26,6 +26,7 @@ body {
 	bottom: 15px !important;
 	left: 15px !important;
 	right: 15px !important;
+	background-color: #AAA;
 }
 
 .main-dock .header {

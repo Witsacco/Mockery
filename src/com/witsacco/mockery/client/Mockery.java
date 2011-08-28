@@ -174,14 +174,14 @@ public class Mockery implements EntryPoint {
 		// Add the Header to the main UI
 		mainDock.addNorth( header, 5 );
 
+		// Add the Scoreboard to the main UI
+		mainDock.addEast( scoreboard, 25 );
+
 		// Add the Input to the main UI
 		mainDock.addSouth( inputField, 15 );
 
 		// Add the Room to the main UI
-		mainDock.addWest( room, 65 );
-
-		// Add the Scoreboard to the main UI
-		mainDock.add( scoreboard );
+		mainDock.add( room );
 
 		// Add the page panel to the root page element
 		RootLayoutPanel rp = RootLayoutPanel.get();
