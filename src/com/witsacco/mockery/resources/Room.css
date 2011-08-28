@@ -1,9 +1,11 @@
 @CHARSET "ISO-8859-1";
 
 .room-panel {
-	background-color: #F6F6F6;
 	border-right: 1px solid #666;
 	padding: 10px;
+	background-image: literal("-webkit-gradient(linear, left top, left bottom, from(#9AB), to(#FFF))");
+	background-image: literal("-moz-gradient(linear, left top, left bottom, from(#9AB), to(#FFF))");
+	background-color: #9AB;
 }
 
 .room-panel .message-table {
@@ -12,7 +14,7 @@
 }
 
 .room-panel .message-table .row-even {
-	background-color:  #EDEDED;
+	background-color:  #FFFFFF;
 }
 
 .room-panel .message-table .row-odd {
@@ -28,21 +30,13 @@
 	-moz-border-radius: 10px 0px 0px 10px;
 	border-left: 2px solid #555;
 	border-bottom: 2px solid #555;
-}
-
-.room-panel .message-table .row-even .sender-col {
-	background-image: literal("-webkit-gradient(linear, left top, right top, from(#AAA), to(#EDEDED))");
-	background-image: literal("-moz-gradient(linear, left top, right top, from(#AAA), to(#EDEDED))");
-}
-
-.room-panel .message-table .row-odd .sender-col {
-	background-image: literal("-webkit-gradient(linear, left top, right top, from(#888), to(#CCC))");
-	background-image: literal("-moz-gradient(linear, left top, right top, from(#888), to(#CCC))");
+	box-shadow: 3px 3px 3px #777;
 }
 
 .room-panel .message-table .content-col {
 	padding: 5px;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
 }
 
 .room-panel .message-table .score-col {
@@ -53,6 +47,7 @@
 	-moz-border-radius: 0px 10px 10px 0px;
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
 }
 
 .room-panel .message-table .first-row td {
@@ -70,4 +65,5 @@
 	border-right: 2px solid #555;
 	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
 }
