@@ -1,16 +1,22 @@
 @CHARSET "ISO-8859-1";
 
 .input-panel {
-	background-color: #FFF;
 	border-radius: 0px 0px 0px 8px;
-	border-right: 1px solid #666;
+	padding: 10px;
+	padding-bottom: 15px;
 }
 
 .input-panel .layout-panel {
-	width: 100%;
 	height: 100%;
+	box-shadow: 5px 5px 8px #666;
+	margin-bottom: 7px;
+	border-radius: 10px 10px 10px 10px;
+	background-color: #DDD;
+	border: 2px solid #999;
 }
 
 .input-panel .layout-panel .input-textarea {
 	background-color: #DDD;	
+	margin: 5px;
+	border: 0px;
 }

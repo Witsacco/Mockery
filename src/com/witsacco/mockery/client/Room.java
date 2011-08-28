@@ -72,7 +72,7 @@ public class Room extends ScrollPanel {
 
 	private void updateUI( DisplayMessage message, int rowId ) {
 		// Set message author and body
-		messageTable.setText( rowId, 0, message.getAuthorName() );
+		messageTable.setText( rowId, 0, message.getAuthorName() + " :" );
 		messageTable.setText( rowId, 1, message.getBody() );
 
 		if ( rowId == 0 ) {

@@ -1,11 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 .room-panel {
-	border-right: 1px solid #666;
 	padding: 10px;
-	background-image: literal("-webkit-gradient(linear, left top, left bottom, from(#9AB), to(#FFF))");
-	background-image: literal("-moz-gradient(linear, left top, left bottom, from(#9AB), to(#FFF))");
-	background-color: #9AB;
 }
 
 .room-panel .message-table {
@@ -22,7 +18,6 @@
 }
 
 .room-panel .message-table .sender-col {
-	font-weight: bold;
 	padding: 5px;
 	width: 125px;
 	border-radius: 10px 0px 0px 10px;
@@ -31,6 +26,8 @@
 	border-left: 2px solid #555;
 	border-bottom: 2px solid #555;
 	box-shadow: 3px 3px 3px #777;
+	font-family: 'Permanent Marker', cursive;
+	font-size: 14px;
 }
 
 .room-panel .message-table .content-col {

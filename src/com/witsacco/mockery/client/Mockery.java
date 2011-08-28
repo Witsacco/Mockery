@@ -163,7 +163,7 @@ public class Mockery implements EntryPoint {
 		header.setSize( "100%", "100%" );
 
 		// Add main title label left aligned
-		header.setVerticalAlignment( HasVerticalAlignment.ALIGN_MIDDLE );
+		header.setVerticalAlignment( HasVerticalAlignment.ALIGN_BOTTOM );
 		header.setHorizontalAlignment( HasHorizontalAlignment.ALIGN_LEFT );
 		header.add( mainTitleLabel );
 
@@ -172,7 +172,7 @@ public class Mockery implements EntryPoint {
 		header.add( logoutButton );
 
 		// Add the Header to the main UI
-		mainDock.addNorth( header, 5 );
+		mainDock.addNorth( header, 8 );
 
 		// Add the Scoreboard to the main UI
 		mainDock.addEast( scoreboard, 25 );
