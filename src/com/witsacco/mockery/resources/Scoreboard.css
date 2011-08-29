@@ -36,7 +36,8 @@
 .scoreboard-panel .score-table .user-col {
 	font-weight: bold;
 	padding: 5px;
-	padding-right: 22px;
+	padding-left: 15px;
+	width: 50%;
 }
 
 .scoreboard-panel .score-table .score-col {
@@ -46,12 +47,12 @@
 
 @sprite .online {
 	gwt-image: 'bullet_online';
-	background-position: right;
+	background-position: left;
 	background-repeat: no-repeat;
 }
 
 @sprite .offline {
 	gwt-image: 'bullet_offline';
-	background-position: right;
+	background-position: left;
 	background-repeat: no-repeat;
 }
