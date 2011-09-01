@@ -45,8 +45,6 @@ public class Mockery implements EntryPoint {
 	// The room that the user is in
 	private int activeRoom;
     
-	private int x;
-	
 	// Our update poller
 	private UpdatePoller poller;
 
