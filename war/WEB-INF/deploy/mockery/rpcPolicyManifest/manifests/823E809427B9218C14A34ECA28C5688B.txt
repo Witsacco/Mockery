@@ -1,2 +1,0 @@
-serviceClass: com.witsacco.mockery.client.JoinService
-path: EEC0CD9777FC5CCC11E6DD9EFDF19163.gwt.rpc

@@ -1,2 +1,0 @@
-serviceClass: com.witsacco.mockery.services.GetUpdatesService
-path: 45219FEF5AC3FFB34AC564BD86DCEC6B.gwt.rpc

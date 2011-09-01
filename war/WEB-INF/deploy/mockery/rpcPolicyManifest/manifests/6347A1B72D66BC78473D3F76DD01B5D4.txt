@@ -1,2 +1,0 @@
-serviceClass: com.witsacco.mockery.client.GreetingService
-path: 058112023DDA5AF98BE26C09CD5CBA90.gwt.rpc

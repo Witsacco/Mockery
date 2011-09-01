@@ -1,2 +1,0 @@
-serviceClass: com.witsacco.mockery.services.MessageScoreService
-path: 77BDD988CA504A61BB61F907E993CDC5.gwt.rpc

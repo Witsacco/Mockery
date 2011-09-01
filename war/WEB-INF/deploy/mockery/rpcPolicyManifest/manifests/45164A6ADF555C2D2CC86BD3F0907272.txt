@@ -1,2 +1,0 @@
-serviceClass: com.witsacco.mockery.client.GetNewMessagesService
-path: A0DCC76F1A1B99991FF1E6CFDFF05B29.gwt.rpc
