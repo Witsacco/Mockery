@@ -14,10 +14,10 @@ public class UpdatePackage implements Serializable {
 	// The time this UpdatePackage was created
 	private Date timestamp;
 
-	// Current standings as of `created`
+	// Current standings as of `timestamp`
 	private ArrayList< DisplayUser > currentStandings;
 
-	// Messages that are new or have been updated as of `created`
+	// Messages that are new or have been updated as of `timestamp`
 	private ArrayList< DisplayMessage > updatedMessages;
 
 	public UpdatePackage() {

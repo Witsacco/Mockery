@@ -1,0 +1,2 @@
+serviceClass: com.witsacco.mockery.services.LoginService
+path: 6E69E7CD093EFE03B21F67839883CDFA.gwt.rpc

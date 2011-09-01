@@ -1,8 +1,6 @@
 @CHARSET "ISO-8859-1";
 
 .room-panel {
-	background-color: #F6F6F6;
-	border-right: 1px solid #666;
 	padding: 10px;
 }
 
@@ -12,7 +10,7 @@
 }
 
 .room-panel .message-table .row-even {
-	background-color:  #EDEDED;
+	background-color:  #FFFFFF;
 }
 
 .room-panel .message-table .row-odd {
@@ -20,21 +18,22 @@
 }
 
 .room-panel .message-table .sender-col {
-	font-weight: bold;
 	padding: 5px;
 	width: 125px;
 	border-radius: 10px 0px 0px 10px;
 	-webkit-border-radius: 10px 0px 0px 10px;
 	-moz-border-radius: 10px 0px 0px 10px;
 	border-left: 2px solid #555;
-	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
+	font-family: 'Permanent Marker', cursive;
+	font-size: 14px;
 }
 
 .room-panel .message-table .content-col {
 	padding: 5px;
-	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
 }
 
 .room-panel .message-table .score-col {
@@ -44,8 +43,12 @@
 	-webkit-border-radius: 0px 10px 10px 0px;
 	-moz-border-radius: 0px 10px 10px 0px;
 	border-right: 2px solid #555;
-	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
+}
+
+.room-panel .message-table .first-row td {
+	border-top: 2px solid #555;
 }
 
 @sprite .spinner {
@@ -59,4 +62,5 @@
 	border-right: 2px solid #555;
 	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
 }

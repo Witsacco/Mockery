@@ -1,20 +1,28 @@
 @CHARSET "ISO-8859-1";
 
 .scoreboard-panel {
-	background-color: #F5F7FF;
-	border-left: 1px solid #666;
+	background-color: #EDEDED;
+	border: 2px solid #777;
+	padding: 10px;
+	margin: 10px;
+	border-radius: 10px;
+	box-shadow: 3px 3px 6px #333;
 }
 
 .scoreboard-panel .score-table {
-	width: 95%;
-	margin-top: 5px;
+	width: 100%;
 	border-collapse: collapse;
 }
 
 .scoreboard-panel .score-table .score-header {
-	background-color: blue;
+	background-color: #444;
 	font-weight: bold;
 	color: white;
+}
+
+.scoreboard-panel .score-table .score-header td {
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .scoreboard-panel .score-table .row-even {
@@ -28,7 +36,8 @@
 .scoreboard-panel .score-table .user-col {
 	font-weight: bold;
 	padding: 5px;
-	padding-right: 22px;
+	padding-left: 15px;
+	width: 50%;
 }
 
 .scoreboard-panel .score-table .score-col {
@@ -38,12 +47,12 @@
 
 @sprite .online {
 	gwt-image: 'bullet_online';
-	background-position: right;
+	background-position: left;
 	background-repeat: no-repeat;
 }
 
 @sprite .offline {
 	gwt-image: 'bullet_offline';
-	background-position: right;
+	background-position: left;
 	background-repeat: no-repeat;
 }

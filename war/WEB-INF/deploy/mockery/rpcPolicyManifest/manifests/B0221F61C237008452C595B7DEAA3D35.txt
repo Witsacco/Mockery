@@ -1,0 +1,2 @@
+serviceClass: com.witsacco.mockery.services.LeaveService
+path: 3FD558D58B9BA83DC6AE689EC177B9DA.gwt.rpc
