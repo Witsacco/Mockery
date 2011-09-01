@@ -44,7 +44,7 @@ public class Mockery implements EntryPoint {
 
 	// The room that the user is in
 	private int activeRoom;
-    
+
 	// Our update poller
 	private UpdatePoller poller;
 
@@ -175,7 +175,7 @@ public class Mockery implements EntryPoint {
 		mainDock.addNorth( header, 8 );
 
 		// Add the Scoreboard to the main UI
-		mainDock.addEast( scoreboard, 20 );
+		mainDock.addEast( scoreboard, 25 );
 
 		// Add the Input to the main UI
 		mainDock.addSouth( inputField, 15 );
