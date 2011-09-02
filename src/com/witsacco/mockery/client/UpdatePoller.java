@@ -68,7 +68,7 @@ public class UpdatePoller extends Timer implements HasHandlers {
 				fireEvent( new ScoreboardUpdateAvailableEvent( updates.getCurrentStandings() ) );
 
 				// Update the last time we checked for the next iteration
-				lastChecked = new Date();
+				lastChecked = updates.getTimestamp();
 			}
 		};
 
