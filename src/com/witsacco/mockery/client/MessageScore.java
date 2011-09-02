@@ -1,6 +1,9 @@
 package com.witsacco.mockery.client;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
 
 public class MessageScore implements Serializable {
 
@@ -26,6 +29,11 @@ public class MessageScore implements Serializable {
 		this.explanation = explanation;
 	}
 
+	public MessageScore( int score, ArrayList< String > reasons ) {
+		this.score = score;
+		this.explanation = StringUtils.join( reasons, ", " );
+	}
+
 	/**
 	 * @return the messageId
 	 */
@@ -34,7 +42,8 @@ public class MessageScore implements Serializable {
 	}
 
 	/**
-	 * @param messageId the messageId to set
+	 * @param messageId
+	 *            the messageId to set
 	 */
 	public void setMessageId( long messageId ) {
 		this.messageId = messageId;
