@@ -37,14 +37,25 @@
 }
 
 .room-panel .message-table .score-col {
-	padding-right: 3px;
+	padding-left: 30px;
 	font-weight: bold;
+	border-bottom: 2px solid #555;
+	box-shadow: 3px 3px 3px #777;
+}
+
+.room-panel .message-table .score-reason-col {
+	color: transparent;
+	padding-right: 3px;
 	border-radius: 0px 10px 10px 0px;
 	-webkit-border-radius: 0px 10px 10px 0px;
 	-moz-border-radius: 0px 10px 10px 0px;
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
 	box-shadow: 3px 3px 3px #777;
+}
+
+.room-panel .message-table .score-reason-col:hover {
+	color: #666;
 }
 
 .room-panel .message-table .first-row td {

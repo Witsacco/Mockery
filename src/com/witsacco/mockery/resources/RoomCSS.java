@@ -4,29 +4,33 @@ import com.google.gwt.resources.client.CssResource;
 
 public interface RoomCSS extends CssResource {
 
-	@ClassName("room-panel")
+	@ClassName( "room-panel" )
 	String roomPanel();
 
-	@ClassName("message-table")
+	@ClassName( "message-table" )
 	String messageTable();
 
-	@ClassName("row-even")
+	@ClassName( "row-even" )
 	String rowEven();
-	
-	@ClassName("row-odd")
+
+	@ClassName( "row-odd" )
 	String rowOdd();
 
-	@ClassName("sender-col")
+	@ClassName( "sender-col" )
 	String senderCol();
 
-	@ClassName("content-col")
+	@ClassName( "content-col" )
 	String contentCol();
 
-	@ClassName("score-col")
+	@ClassName( "score-col" )
 	String scoreCol();
-	
-	@ClassName( "first-row")
+
+	@ClassName( "score-reason-col" )
+	String scoreReasonCol();
+
+	@ClassName( "first-row" )
 	String firstRow();
-	
+
 	String spinner();
+
 }

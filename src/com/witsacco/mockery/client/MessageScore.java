@@ -3,8 +3,6 @@ package com.witsacco.mockery.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringUtils;
-
 public class MessageScore implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +29,19 @@ public class MessageScore implements Serializable {
 
 	public MessageScore( int score, ArrayList< String > reasons ) {
 		this.score = score;
-		this.explanation = StringUtils.join( reasons, ", " );
+
+		if ( reasons.size() > 0 ) {
+			StringBuilder sb = new StringBuilder();
+
+			for ( String reason : reasons ) {
+				sb.append( reason + ", " );
+			}
+
+			String expl = sb.toString();
+			expl = expl.substring( 0, expl.length() - 2 );
+
+			this.explanation = expl;
+		}
 	}
 
 	/**

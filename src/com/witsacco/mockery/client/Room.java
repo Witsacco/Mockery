@@ -92,6 +92,9 @@ public class Room extends ScrollPanel {
 			// This message has been scored, update it appropriately
 			messageTable.setText( rowId, 2, message.getScore() );
 			messageTable.getCellFormatter().setStyleName( rowId, 2, css.scoreCol() );
+			
+			messageTable.setText( rowId, 3, message.getScoreReason() );
+			messageTable.getCellFormatter().setStyleName( rowId, 3, css.scoreReasonCol() );			
 		}
 
 		// TODO Add a timestamp to this view
