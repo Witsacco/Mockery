@@ -41,6 +41,7 @@
 	font-weight: bold;
 	border-bottom: 2px solid #555;
 	box-shadow: 3px 3px 3px #777;
+	white-space: nowrap;
 }
 
 .room-panel .message-table .score-reason-col {
@@ -52,9 +53,12 @@
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
 	box-shadow: 3px 3px 3px #777;
+	white-space: nowrap;
+	padding: 0px 20px;
+	font-style: italic;
 }
 
-.room-panel .message-table .score-reason-col:hover {
+.room-panel .message-table tr:hover .score-reason-col {
 	color: #666;
 }
 
