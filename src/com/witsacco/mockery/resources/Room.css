@@ -20,42 +20,42 @@
 .room-panel .message-table .sender-col {
 	padding: 5px;
 	width: 125px;
-	border-radius: 10px 0px 0px 10px;
 	-webkit-border-radius: 10px 0px 0px 10px;
-	-moz-border-radius: 10px 0px 0px 10px;
 	border-left: 2px solid #555;
 	border-bottom: 2px solid #555;
-	box-shadow: 3px 3px 3px #777;
+	-webkit-box-shadow: 3px 3px 3px #777;
 	font-family: 'Permanent Marker', cursive;
 	font-size: 14px;
+	text-align: left;
 }
 
 .room-panel .message-table .content-col {
 	padding: 5px;
 	border-bottom: 2px solid #555;
-	box-shadow: 3px 3px 3px #777;
+	-webkit-box-shadow: 3px 3px 3px #777;
+	text-align: left;
 }
 
 .room-panel .message-table .score-col {
 	padding-left: 30px;
 	font-weight: bold;
 	border-bottom: 2px solid #555;
-	box-shadow: 3px 3px 3px #777;
+	-webkit-box-shadow: 3px 3px 3px #777;
 	white-space: nowrap;
+	text-align: left;
 }
 
 .room-panel .message-table .score-reason-col {
 	color: transparent;
 	padding-right: 3px;
-	border-radius: 0px 10px 10px 0px;
 	-webkit-border-radius: 0px 10px 10px 0px;
-	-moz-border-radius: 0px 10px 10px 0px;
 	border-right: 2px solid #555;
 	border-bottom: 2px solid #555;
-	box-shadow: 3px 3px 3px #777;
+	-webkit-box-shadow: 3px 3px 3px #777;
 	white-space: nowrap;
 	padding: 0px 20px;
 	font-style: italic;
+	text-align: left;
 }
 
 .room-panel .message-table tr:hover .score-reason-col {
@@ -71,11 +71,9 @@
 	background-position: center;
 	background-repeat: no-repeat;
 	padding-right: 3px;
-	border-radius: 0px 10px 10px 0px;
 	-webkit-border-radius: 0px 10px 10px 0px;
-	-moz-border-radius: 0px 10px 10px 0px;
 	border-right: 2px solid #555;
 	border-top: 2px solid #555;
 	border-bottom: 2px solid #555;
-	box-shadow: 3px 3px 3px #777;
+	-webkit-box-shadow: 3px 3px 3px #777;
 }

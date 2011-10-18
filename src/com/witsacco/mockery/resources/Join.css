@@ -4,6 +4,7 @@
 	left: 50% !important;
 	top: 50px !important;
 	margin-left: -150px;
+	height: 160px;
 }
 
 .decorator .join-panel {
@@ -12,6 +13,12 @@
 	padding: 20px;
 	background-color: #EDEDED;
 	border: 2px solid #CCC;
+	position: relative;
+	display: block;
+}
+
+.decorator .join-panel td {
+	padding-bottom: 10px;	
 }
 
 .decorator .join-panel .join-message {
@@ -25,5 +32,5 @@
 }
 
 .decorator .join-panel .room-chooser {
-	font-size: 20px;
+	font-size: 12px;
 }
